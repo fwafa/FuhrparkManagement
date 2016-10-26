@@ -8,6 +8,10 @@
     android:padding="16dp"
     tools:context="com.student.fahrtenbuchapp.StartDrivingActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"/>
 
     <TextView
         android:id="@+id/tvRouteInfo"
