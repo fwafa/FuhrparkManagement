@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Fahrtenbuch App</string>
+    <string name="title_activity_reservation">Reservation</string>
+</resources>
