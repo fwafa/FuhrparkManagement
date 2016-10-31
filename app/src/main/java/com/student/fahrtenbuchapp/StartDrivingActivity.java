@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,16 +14,32 @@ import android.text.style.RelativeSizeSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class StartDrivingActivity extends AppCompatActivity {
+import java.text.SimpleDateFormat;
+
+public class StartDrivingActivity extends AppCompatActivity implements View.OnClickListener{
 
     public static final String MyPREFERENCES = "MyPrefs";
     public static final String Name = "name_key";
     public static final String Surname = "surname_key";
 
-    private TextView textView;
+    private TextView textViewDriverName, textViewDateAndTime;
+    private TextView textViewSetStartTime, textViewSetEndTime;
+
+    private Button startButton, stopButton;
+
+    private Chronometer simpleChronometer;
+
+    private SimpleDateFormat startingTime;
+    private String currentTimeString;
+
+    private long time = 0;
+
     private Session session;
 
     @Override
@@ -30,19 +47,69 @@ public class StartDrivingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_driving);
 
-        textView = (TextView) findViewById(R.id.nameTextView);
+        session = new Session(this);
+        if(!session.loggedin()){
+            logout();
+        }
+
+        simpleChronometer = (Chronometer) findViewById(R.id.simpleChronometer);
+
+        textViewDriverName = (TextView) findViewById(R.id.nameTextView);
+        textViewDateAndTime = (TextView) findViewById(R.id.tvSetDate);
+        textViewSetStartTime = (TextView) findViewById(R.id.tvSetStartTime);
+        textViewSetEndTime = (TextView) findViewById(R.id.tvSetEndTime);
 
         SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String savedName = sharedPreferences.getString(Name, "");
         String savedSurname = sharedPreferences.getString(Surname, "");
 
-        textView.setText("Driver: " + savedSurname + " " + savedName);
+        textViewDriverName.setText(savedSurname + " " + savedName);
 
-        session = new Session(this);
-        if(!session.loggedin()){
-            logout();
+        long date = System.currentTimeMillis();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy h:mm");
+        String dateString = sdf.format(date);
+        textViewDateAndTime.setText(dateString);
+
+        startingTime = new SimpleDateFormat("h:mm");
+        currentTimeString = startingTime.format(date);
+        textViewSetStartTime.setText(currentTimeString);
+
+        startButton = (Button) findViewById(R.id.buttonStart);
+        stopButton = (Button) findViewById(R.id.buttonStop);
+
+        startButton.setOnClickListener(this);
+        stopButton.setOnClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId())
+        {
+            case R.id.buttonStart:
+                startButton.setEnabled(false);
+                stopButton.setEnabled(true);
+                simpleChronometer.setBase(SystemClock.elapsedRealtime() + time);
+                simpleChronometer.start();
+                break;
+
+            case R.id.buttonStop:
+                stopButton.setEnabled(false);
+                startButton.setEnabled(true);
+                time = simpleChronometer.getBase() - SystemClock.elapsedRealtime();
+                simpleChronometer.stop();
+
+                long date = System.currentTimeMillis();
+                startingTime = new SimpleDateFormat("h:mm");
+                currentTimeString = startingTime.format(date);
+                textViewSetEndTime.setText(currentTimeString);
+
+                break;
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -8,81 +8,13 @@
     tools:context="com.student.fahrtenbuchapp.ReservationActivity">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reservation date"
-        android:id="@+id/textView1"
-        android:textSize="30sp"/>
-
-    <DatePicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/datePicker"
-        android:datePickerMode="spinner"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/datePicker"
-        android:text="From"
+        android:id="@+id/lvMovies"
+        android:text="Reservation Activity"
         android:textSize="30sp"
-        android:layout_marginTop="80dp"
-        android:layout_marginLeft="15dp"/>
-
-    <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/datePicker"
-        android:text="To"
-        android:textSize="30sp"
-        android:layout_marginTop="80dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="205dp"/>
+        android:layout_height="wrap_content">
 
-    <TimePicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/timePicker1"
-        android:timePickerMode="spinner"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+    </TextView>
 
-    <TimePicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/timePicker2"
-        android:timePickerMode="spinner"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/textView2"
-        android:layout_alignParentRight="true"/>
-
-    <Button
-        android:text="Abort"
-        android:textSize="20sp"
-        android:textColor="#b11b1b"
-        android:layout_width="200dp"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginRight="100dp"
-        android:id="@+id/buttonAbort"
-        style="?android:attr/borderlessButtonStyle"/>
-
-    <Button
-        android:text="Accept"
-        android:textSize="20sp"
-        android:textColor="#258112"
-        android:layout_width="200dp"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:id="@+id/buttonAccept"
-        style="?android:attr/borderlessButtonStyle"/>
 
 </RelativeLayout>

@@ -38,7 +38,7 @@
 
         <TextView
             android:id="@+id/nameTextView"
-            android:text="01.01.2017"
+            android:text="Driver"
             android:textSize="30sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
             android:id="@+id/tvTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Time"
+            android:text="Driven Time"
             android:textSize="30sp"
             android:textColor="#000000"/>
 
@@ -95,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/tvTime"
-            android:layout_marginLeft="180dp"/>
+            android:layout_marginLeft="85dp"/>
 
         <TextView
             android:id="@+id/bindestrich"
@@ -226,16 +226,37 @@
             android:id="@+id/tvKiloCounterStart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start: 23000 km"
+            android:text="Start: "
+            android:textColor="#000000"
             android:textSize="30sp"/>
+
+        <EditText
+            android:id="@+id/etSetKiloStart"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:hint="type km"
+            android:textSize="30sp"
+            android:layout_toRightOf="@+id/tvKiloCounterStart"
+            android:layout_alignBaseline="@+id/tvKiloCounterStart"/>
 
         <TextView
             android:id="@+id/tvKiloCounterStop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="Stop: 23025 km"
+            android:layout_toRightOf="@+id/etSetKiloStart"
+            android:layout_marginLeft="80dp"
+            android:text="Stop: "
+            android:textColor="#000000"
             android:textSize="30sp"/>
+
+        <EditText
+            android:id="@+id/etSetKiloStop"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:hint="type km"
+            android:textSize="30sp"
+            android:layout_toRightOf="@+id/tvKiloCounterStop"
+            android:layout_alignBaseline="@+id/tvKiloCounterStop"/>
 
     </RelativeLayout>
 
@@ -277,13 +298,13 @@
         android:layout_below="@+id/sepLine3"
         android:layout_marginTop="80dp">
 
-        <TextView
-            android:id="@+id/tvSetTimeElapsed"
+        <Chronometer
+            android:id="@+id/simpleChronometer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
             android:textSize="30sp"
-            android:layout_marginLeft="120dp"
+            android:layout_marginLeft="110dp"
             android:layout_marginTop="10dp"/>
 
         <TextView
@@ -309,7 +330,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginLeft="30dp"
         style="?android:attr/borderlessButtonStyle"
-        android:id="@+id/button" />
+        android:id="@+id/buttonStart" />
 
     <Button
         android:text="Stop"
@@ -322,6 +343,6 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="30dp"
         style="?android:attr/borderlessButtonStyle"
-        android:id="@+id/button2" />
+        android:id="@+id/buttonStop" />
 
 </RelativeLayout>

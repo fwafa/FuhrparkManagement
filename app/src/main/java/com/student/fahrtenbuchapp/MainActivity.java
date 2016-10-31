@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void logout(){
+    public void logout(){
         session.setLoggedin(false);
         finish();
         startActivity(new Intent(MainActivity.this,LoginActivity.class));
