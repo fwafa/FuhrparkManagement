@@ -1,9 +1,12 @@
 package com.student.fahrtenbuchapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
@@ -20,6 +23,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jibble.simpleftp.SimpleFTP;
 
@@ -110,6 +114,11 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
                 currentTimeString = startingTime.format(date);
                 textViewSetEndTime.setText(currentTimeString);
 
+                if(isConnected())
+                    Toast.makeText(getApplicationContext(), "You are connected", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getApplicationContext(), "You are NOT connected", Toast.LENGTH_SHORT).show();
+
                 break;
         }
     }
@@ -164,5 +173,16 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
                 dialog.show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public boolean isConnected()
+    {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if(networkInfo != null && networkInfo.isConnected())
+            return true;
+        else
+            return false;
     }
 }

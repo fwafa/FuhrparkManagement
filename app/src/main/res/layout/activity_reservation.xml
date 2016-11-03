@@ -7,23 +7,11 @@
     android:padding="20dp"
     tools:context="com.student.fahrtenbuchapp.ReservationActivity">
 
-    <TextView
-        android:id="@+id/tvReservationActivity"
-        android:text="Reservation Activity"
-        android:textSize="30sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-    </TextView>
-
-    <TextView
-        android:id="@+id/tvJSONPlatzhalter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        android:text="JSON Platzhalter"
-        android:layout_marginTop="50dp"
-        android:layout_below="@+id/tvReservationActivity"/>
-
+        <ListView
+            android:id="@+id/listViewResevation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+        </ListView>
 
 </RelativeLayout>
