@@ -25,6 +25,10 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.student.fahrtenbuchapp.com.student.fahrtenbuchapp.models.Model;
 
 import org.apache.http.client.HttpClient;
@@ -47,115 +51,46 @@ import java.util.List;
 public class ReservationActivity extends AppCompatActivity {
 
     private Session session;
-    private ListView listViewMovies;
+
+    private TextView tvJsonPlatzhalter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservation);
 
-        /*
+        tvJsonPlatzhalter = (TextView) findViewById(R.id.tvJSONPlatzhalter);
+
         session = new Session(this);
         if(!session.loggedin()){
             logout();
         }
 
 
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, "http://farhad-wafa.lima-city.de/Daten.txt", null, new Response.Listener<JSONObject>()
+        {
 
-        listViewMovies = (ListView) findViewById(R.id.lvMovies);
+            @Override
+            public void onResponse(JSONObject response) {
+                tvJsonPlatzhalter.setText("Response: " + response.toString());
+            }
+        }, new Response.ErrorListener() {
 
-        new JSONTask().execute("http://jsonparsing.parseapp.com/jsonData/moviesData.txt"); */
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
 
     }
 
-    /*  public void logout() {
+    public void logout() {
         session.setLoggedin(false);
         finish();
         startActivity(new Intent(ReservationActivity.this, LoginActivity.class));
-    }
-
-
-    class JSONTask extends AsyncTask<String , String, List<Model>> {
-
-        @Override
-        protected List<Model> doInBackground(String... params) {
-
-            HttpURLConnection connection = null;
-            BufferedReader bufferedReader = null;
-
-            try {
-                URL url = new URL(params[0]);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
-
-                InputStream inputStream = connection.getInputStream();
-                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer stringBuffer = new StringBuffer();
-                String line = "";
-                while ((line = bufferedReader.readLine()) != null)
-                {
-                    stringBuffer.append(line);
-                }
-
-                String finalJSONText = stringBuffer.toString();
-                JSONObject parentObject = new JSONObject(finalJSONText);
-                JSONArray parentArray = parentObject.getJSONArray("movies");
-
-                List<Model> movieModelList = new ArrayList<>();
-                for(int i=0; i<parentArray.length(); i++)
-                {
-                    JSONObject finalObject = parentArray.getJSONObject(i);
-
-                    Model movieModel = new Model();
-                    movieModel.setMovie(finalObject.getString("movie"));
-                    movieModel.setYear(finalObject.getInt("year"));
-                    movieModel.setRating((float) finalObject.getDouble("rating"));
-                    movieModel.setDirector(finalObject.getString("director"));
-                    movieModel.setDuration(finalObject.getString("duration"));
-                    movieModel.setTagline(finalObject.getString("tagline"));
-                    movieModel.setImage(finalObject.getString("image"));
-                    movieModel.setStory(finalObject.getString("story"));
-
-                    List<Model.Cast> castList = new ArrayList<>();
-                    for(int j=0; j<finalObject.getJSONArray("cast").length(); j++)
-                    {
-                        Model.Cast cast = new Model.Cast();
-                        cast.setName(finalObject.getJSONArray("cast").getJSONObject(j).getString("name"));
-                        castList.add(cast);
-                    }
-
-                    movieModel.setCastList(castList);
-                    movieModelList.add(movieModel);
-                }
-                return movieModelList;
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } finally {
-                if(connection != null)
-                    connection.disconnect();
-                try {
-                    if(bufferedReader != null)
-                        bufferedReader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(List<Model> result) {
-            super.onPostExecute(result);
-
-            MovieAdapter movieAdapter = new MovieAdapter(getApplicationContext(), R.layout.row, result);
-            listViewMovies.setAdapter(movieAdapter);
-        }
     }
 
 
@@ -181,7 +116,6 @@ public class ReservationActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.refresh:
-                new JSONTask().execute("http://jsonparsing.parseapp.com/jsonData/moviesData.txt");
 
             case R.id.logout:
                 logout();
@@ -206,71 +140,6 @@ public class ReservationActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-    public class MovieAdapter extends ArrayAdapter {
-
-        private List<Model> movieModelList;
-        private int resource;
-        private LayoutInflater inflater;
-
-        public MovieAdapter(Context context, int resource, List<Model> objects) {
-            super(context, resource, objects);
-            movieModelList = objects;
-            this.resource = resource;
-            inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            if(convertView == null)
-            {
-                convertView = inflater.inflate(R.layout.row, null);
-            }
-
-            ImageView imageViewMovieIcon;
-            TextView tvMovie;
-            TextView tvTagline;
-            TextView tvYear;
-            TextView tvDuration;
-            TextView tvDirector;
-            TextView tvCast;
-            TextView tvStory;
-            RatingBar ratingBarMovie;
-
-            imageViewMovieIcon = (ImageView) convertView.findViewById(R.id.imageViewIcon);
-            tvMovie = (TextView) convertView.findViewById(R.id.textViewMovie);
-            tvTagline = (TextView) convertView.findViewById(R.id.textViewTagline);
-            tvYear = (TextView) convertView.findViewById(R.id.textViewYear);
-            tvDuration = (TextView) convertView.findViewById(R.id.textViewDuration);
-            tvDirector = (TextView) convertView.findViewById(R.id.textViewDirector);
-            tvCast = (TextView) convertView.findViewById(R.id.textViewCast);
-            tvStory = (TextView) convertView.findViewById(R.id.textViewStory);
-            ratingBarMovie = (RatingBar) convertView.findViewById(R.id.ratingBar);
-
-            tvMovie.setText(movieModelList.get(position).getMovie());
-            tvTagline.setText(movieModelList.get(position).getTagline());
-            tvYear.setText("Year: " + movieModelList.get(position).getYear());
-            tvDuration.setText("Duration: " + movieModelList.get(position).getDuration());
-            tvDirector.setText("Director: " + movieModelList.get(position).getDirector());
-            tvStory.setText(movieModelList.get(position).getStory());
-
-            StringBuffer stringBuffer = new StringBuffer();
-            for (Model.Cast cast : movieModelList.get(position).getCastList()) {
-
-                stringBuffer.append(cast.getName() + ", ");
-            }
-
-            tvCast.setText(stringBuffer);
-
-            ratingBarMovie.setRating(movieModelList.get(position).getRating()/2);
-
-            return convertView;
-        }
-    }
-
-    */
 }
 
 

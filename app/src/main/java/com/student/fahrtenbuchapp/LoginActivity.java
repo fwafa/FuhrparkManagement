@@ -2,7 +2,10 @@ package com.student.fahrtenbuchapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Path;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -37,9 +41,17 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button login, register;
-    private EditText etUser, etPass;
     private DBHelper db;
     private Session session;
+
+    private String name, surname, password, username;
+
+    private EditText etUser, etPass;
+
+    public static final String MyPREFERENCES = "MyPrefs";
+    public static final String Name = "name_key";
+    public static final String Surname = "surname_key";
+    SharedPreferences sharedPreferences;
 
 
     @Override
@@ -60,8 +72,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         login = (Button) findViewById(R.id.btnLogin);
         register = (Button) findViewById(R.id.btnRegister);
-        etUser = (EditText) findViewById(R.id.etUsername);
-        etPass = (EditText) findViewById(R.id.etPassword);
 
         login.setOnClickListener(this);
         register.setOnClickListener(this);
@@ -78,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId())
         {
             case R.id.btnLogin:
-                new JSONTask().execute("http://localhost:8080/manager/Daten.txt");
+                new JSONTask().execute("http://farhad-wafa.lima-city.de/Daten.txt");
                 break;
             case R.id.btnRegister:
                 startActivity(new Intent(LoginActivity.this,RegistrationActivity.class));
@@ -177,24 +187,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         protected void onPostExecute(List<Model> result) {
             super.onPostExecute(result);
 
-            String username = result.get(0).getUsername();
-            String password = result.get(0).getPassword();
+            etUser = (EditText) findViewById(R.id.etUsername);
+            etPass = (EditText) findViewById(R.id.etPassword);
 
-            if(etUser.equals(username) && etPass.equals(password)){
-                session.setLoggedin(true);
-                startActivity(new Intent(LoginActivity.this, WaitForLoginActivity.class));
-                finish();
-            }
-            else if (username.length() == 0)
-            {
-                etUser.setError("Enter Username");
-            }
-            else if(password.length() == 0)
-            {
-                etPass.setError("Enter Password");
-            }
-            else {
-                Toast.makeText(getApplicationContext(), "Wrong username/password", Toast.LENGTH_SHORT).show();
+            for(int i=0; i<result.size(); i++) {
+                name = result.get(i).getName();
+                surname = result.get(i).getSurname();
+                username = result.get(i).getUsername();
+                password = result.get(i).getPassword();
+
+                if (username.equals(etUser.getText().toString()) && password.equals(etPass.getText().toString())) {
+
+                    sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(Name, name);
+                    editor.putString(Surname, surname);
+                    editor.commit();
+
+                    session.setLoggedin(true);
+                    startActivity(new Intent(LoginActivity.this, WaitForLoginActivity.class));
+                    finish();
+                } else if (username.length() == 0) {
+                    etUser.setError("Enter Username");
+                } else if (password.length() == 0) {
+                    etPass.setError("Enter Password");
+                } else {
+                    //Toast.makeText(getApplicationContext(), "Wrong username/password", Toast.LENGTH_SHORT).show();
+                }
+
             }
 
         }

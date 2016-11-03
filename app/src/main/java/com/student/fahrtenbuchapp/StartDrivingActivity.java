@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,8 @@ import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.jibble.simpleftp.SimpleFTP;
+
 import java.text.SimpleDateFormat;
 
 public class StartDrivingActivity extends AppCompatActivity implements View.OnClickListener{
@@ -30,6 +33,7 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
 
     private TextView textViewDriverName, textViewDateAndTime;
     private TextView textViewSetStartTime, textViewSetEndTime;
+    private TextView textViewDate;
 
     private Button startButton, stopButton;
 
