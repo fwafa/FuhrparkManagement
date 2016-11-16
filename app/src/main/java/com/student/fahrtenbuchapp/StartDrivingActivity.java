@@ -21,23 +21,32 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.jibble.simpleftp.SimpleFTP;
+import com.student.fahrtenbuchapp.com.student.fahrtenbuchapp.models.Model;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StartDrivingActivity extends AppCompatActivity implements View.OnClickListener{
 
     public static final String MyPREFERENCES = "MyPrefs";
-    public static final String Name = "name_key";
-    public static final String Surname = "surname_key";
 
-    private TextView textViewDriverName, textViewDateAndTime;
+    private TextView tvRoleName, tvDriverName, textViewDateAndTime;
     private TextView textViewSetStartTime, textViewSetEndTime;
-    private TextView textViewDate;
 
     private Button startButton, stopButton;
 
@@ -45,6 +54,8 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
 
     private SimpleDateFormat startingTime;
     private String currentTimeString;
+
+    private String roleName, driverName, savedToken, id;
 
     private long time = 0;
 
@@ -62,16 +73,12 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
 
         simpleChronometer = (Chronometer) findViewById(R.id.simpleChronometer);
 
-        textViewDriverName = (TextView) findViewById(R.id.nameTextView);
+        tvDriverName = (TextView) findViewById(R.id.nameTextView);
+        tvRoleName = (TextView) findViewById(R.id.tvRoleInfo);
+
         textViewDateAndTime = (TextView) findViewById(R.id.tvSetDate);
         textViewSetStartTime = (TextView) findViewById(R.id.tvSetStartTime);
         textViewSetEndTime = (TextView) findViewById(R.id.tvSetEndTime);
-
-        SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        String savedName = sharedPreferences.getString(Name, "");
-        String savedSurname = sharedPreferences.getString(Surname, "");
-
-        textViewDriverName.setText(savedSurname + " " + savedName);
 
         long date = System.currentTimeMillis();
 
@@ -88,6 +95,8 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
 
         startButton.setOnClickListener(this);
         stopButton.setOnClickListener(this);
+
+        new JSONTaskUser().execute();
     }
 
 
@@ -115,13 +124,109 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
                 textViewSetEndTime.setText(currentTimeString);
 
                 if(isConnected())
-                    Toast.makeText(getApplicationContext(), "You are connected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "You are connected to the internet", Toast.LENGTH_SHORT).show();
                 else
-                    Toast.makeText(getApplicationContext(), "You are NOT connected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "You are NOT connected to the internet", Toast.LENGTH_SHORT).show();
 
                 break;
         }
     }
+
+
+
+
+    public class JSONTaskUser extends AsyncTask<String , String, List<Model>> {
+
+        @Override
+        protected List<Model> doInBackground(String... params) {
+
+            SharedPreferences sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+            savedToken = sharedPreferences.getString("myToken", "");
+
+            HttpURLConnection connection = null;
+            BufferedReader bufferedReader = null;
+
+            try {
+                URL url = new URL("http://10.18.2.151:3000/api/user");
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("Accept-Language", "en-US");
+                connection.setRequestProperty("Content-type", "application/json; charset=UTF-8");
+                connection.setRequestProperty("Authorization", "Bearer " + savedToken);
+                connection.setConnectTimeout(20000);
+                connection.setReadTimeout(20000);
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                connection.connect();
+
+                InputStream inputStream = connection.getInputStream();
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuffer stringBuffer = new StringBuffer();
+                String line = "";
+                while ((line = bufferedReader.readLine()) != null)
+                {
+                    stringBuffer.append(line);
+                }
+
+                String finalJSONText = stringBuffer.toString();
+                JSONArray parentArray = new JSONArray(finalJSONText);
+
+                List<Model> userList = new ArrayList<>();
+                for(int i=0; i<parentArray.length(); i++)
+                {
+                    JSONObject finalObject = parentArray.getJSONObject(i);
+
+                    Model userModel = new Model();
+                    userModel.setName(finalObject.getString("name"));
+                    userModel.setRole(finalObject.getString("role"));
+                    userModel.setId(finalObject.getString("_id"));
+
+                    userList.add(userModel);
+                    //db.addUser(userModelList.get(i).getUsername(), userModelList.get(i).getPassword());
+                }
+
+                return userList;
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                if(connection != null)
+                    connection.disconnect();
+                try {
+                    if(bufferedReader != null)
+                        bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+
+
+
+        @Override
+        protected void onPostExecute(List<Model> result) {
+            super.onPostExecute(result);
+
+            for (int i=0; i<result.size(); i++)
+            {
+                driverName = result.get(i).getName();
+                roleName   = result.get(i).getRole();
+                id = result.get(i).getId();
+
+
+                tvDriverName.setText(driverName);
+                tvRoleName.setText(roleName);
+            }
+        }
+    }
+
+
 
 
     @Override

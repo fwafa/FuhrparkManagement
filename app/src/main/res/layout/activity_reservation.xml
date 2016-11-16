@@ -7,11 +7,23 @@
     android:padding="20dp"
     tools:context="com.student.fahrtenbuchapp.ReservationActivity">
 
-        <ListView
-            android:id="@+id/listViewResevation"
+        <TextView
+            android:text="Reservation Activity: Token Test"
+            android:textSize="30sp"
+            android:id="@+id/textViewReservation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp">
-        </ListView>
+        </TextView>
+
+        <TextView
+            android:id="@+id/tvToken"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Token"
+            android:textSize="30sp"
+            android:layout_below="@+id/textViewReservation"
+            android:layout_marginTop="30dp"/>
+
 
 </RelativeLayout>

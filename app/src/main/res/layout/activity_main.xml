@@ -19,7 +19,7 @@
             android:layout_height="220dp"
             app:cardBackgroundColor="#b8beef"
             app:cardCornerRadius="4dp"
-            android:id="@+id/cardViewAudi">
+            android:id="@+id/cardViewAuto1">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                     android:layout_width="200dp"
                     android:layout_height="match_parent"
                     app:srcCompat="@drawable/car_1"
-                    android:id="@+id/imageButtonAudi"
+                    android:id="@+id/imageButtonAuto"
                     android:background="#a7a7ff"
                     android:scaleType="fitCenter" />
 
@@ -39,9 +39,20 @@
                     android:text="Audi"
                     android:textSize="50sp"
                     android:textColor="#070b6b"
-                    android:layout_toRightOf="@+id/imageButtonAudi"
+                    android:layout_toRightOf="@+id/imageButtonAuto"
                     android:layout_marginLeft="20dp"
-                    android:id="@+id/textViewAudi"/>
+                    android:id="@+id/textViewAuto1"/>
+
+                <TextView
+                    android:id="@+id/textViewModel1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/imageButtonAuto"
+                    android:layout_below="@+id/textViewAuto1"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Model"
+                    android:textSize="25sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -53,23 +64,23 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/imageButtonAudi"
-                    android:layout_below="@+id/textViewAudi"
+                    android:layout_toRightOf="@+id/imageButtonAuto"
+                    android:layout_below="@+id/textViewAuto1"
                     android:layout_marginTop="50dp"
                     android:layout_marginLeft="20dp"
-                    android:id="@+id/relativeLayout2Audi">
+                    android:id="@+id/relativeLayout2Auto1">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Availability"
-                        android:id="@+id/textViewAudiVerfuegbar"
+                        android:id="@+id/textViewAuto1Verfuegbar"
                         android:textSize="30sp"/>
 
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="50dp"
-                        android:layout_below="@+id/textViewAudiVerfuegbar"
+                        android:layout_below="@+id/textViewAuto1Verfuegbar"
                         app:srcCompat="@drawable/ic_thumb_up_white"
                         android:layout_marginTop="20dp"
                         android:layout_marginLeft="-30dp"
@@ -80,7 +91,7 @@
                         android:layout_width="100dp"
                         android:layout_height="50dp"
                         android:layout_toRightOf="@+id/thumb_up_audi"
-                        android:layout_below="@+id/textViewAudiVerfuegbar"
+                        android:layout_below="@+id/textViewAuto1Verfuegbar"
                         app:srcCompat="@drawable/ic_thumb_down_white"
                         android:layout_marginTop="20dp"
                         android:layout_marginLeft="-30dp"
@@ -89,7 +100,7 @@
                     <Button
                         android:layout_width="200dp"
                         android:layout_height="70dp"
-                        android:id="@+id/bookingButtonAudi"
+                        android:id="@+id/bookingButtonAuto1"
                         android:layout_alignParentRight="true"
                         android:layout_marginTop="40dp"
                         android:text="Reservation"
@@ -106,10 +117,10 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            android:layout_below="@+id/cardViewAudi"
+            android:layout_below="@+id/cardViewAuto1"
             app:cardBackgroundColor="#b8beef"
             app:cardCornerRadius="4dp"
-            android:id="@+id/cardViewBmw"
+            android:id="@+id/cardViewAuto2"
             android:layout_marginTop="20dp">
 
             <RelativeLayout
@@ -119,12 +130,23 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="BMW"
+                    android:text="VW"
                     android:textSize="50sp"
                     android:textColor="#070b6b"
-                    android:layout_toRightOf="@+id/imageButtonBmw"
+                    android:layout_toRightOf="@+id/imageButtonAuto2"
                     android:layout_marginLeft="20dp"
-                    android:id="@+id/textViewBmw"/>
+                    android:id="@+id/textViewAuto2"/>
+
+                <TextView
+                    android:id="@+id/textViewModel2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/imageButtonAuto2"
+                    android:layout_below="@+id/textViewAuto2"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Model"
+                    android:textSize="25sp"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -136,23 +158,23 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/imageButtonBmw"
-                    android:layout_below="@+id/textViewBmw"
+                    android:layout_toRightOf="@+id/imageButtonAuto2"
+                    android:layout_below="@+id/textViewAuto2"
                     android:layout_marginTop="50dp"
                     android:layout_marginLeft="20dp"
-                    android:id="@+id/relativeLayout2Bmw">
+                    android:id="@+id/relativeLayout2Auto2">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Availability"
-                        android:id="@+id/textViewBmwVerfuegbar"
+                        android:id="@+id/textViewAuto2Verfuegbar"
                         android:textSize="30sp"/>
 
                     <ImageView
                         android:layout_width="100dp"
                         android:layout_height="50dp"
-                        android:layout_below="@+id/textViewBmwVerfuegbar"
+                        android:layout_below="@+id/textViewAuto2Verfuegbar"
                         app:srcCompat="@drawable/ic_thumb_up_white"
                         android:layout_marginTop="20dp"
                         android:layout_marginLeft="-30dp"
@@ -163,7 +185,7 @@
                         android:layout_width="100dp"
                         android:layout_height="50dp"
                         android:layout_toRightOf="@+id/thumb_up_bmw"
-                        android:layout_below="@+id/textViewBmwVerfuegbar"
+                        android:layout_below="@+id/textViewAuto2Verfuegbar"
                         app:srcCompat="@drawable/ic_thumb_down_white"
                         android:layout_marginTop="20dp"
                         android:layout_marginLeft="-30dp"
@@ -172,7 +194,7 @@
                     <Button
                         android:layout_width="200dp"
                         android:layout_height="70dp"
-                        android:id="@+id/bookingButtonBmw"
+                        android:id="@+id/bookingButtonAuto2"
                         android:layout_alignParentRight="true"
                         android:layout_marginTop="40dp"
                         android:text="Reservation"
@@ -185,8 +207,8 @@
                 <ImageButton
                     android:layout_width="200dp"
                     android:layout_height="match_parent"
-                    app:srcCompat="@drawable/car_2"
-                    android:id="@+id/imageButtonBmw"
+                    app:srcCompat="@drawable/car_3"
+                    android:id="@+id/imageButtonAuto2"
                     android:background="#a7a7ff"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
@@ -200,7 +222,7 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            android:layout_below="@+id/cardViewBmw"
+            android:layout_below="@+id/cardViewAuto2"
             app:cardBackgroundColor="#b8beef"
             app:cardCornerRadius="4dp"
             android:id="@+id/cardViewVw"
@@ -213,7 +235,7 @@
                 <ImageButton
                     android:layout_width="200dp"
                     android:layout_height="match_parent"
-                    app:srcCompat="@drawable/car_3"
+                    app:srcCompat="@drawable/car_2"
                     android:id="@+id/imageButtonVw"
                     android:background="#a7a7ff"
                     android:scaleType="fitCenter"/>
@@ -221,7 +243,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="VW"
+                    android:text="BMW"
                     android:textSize="50sp"
                     android:textColor="#070b6b"
                     android:layout_toRightOf="@+id/imageButtonVw"

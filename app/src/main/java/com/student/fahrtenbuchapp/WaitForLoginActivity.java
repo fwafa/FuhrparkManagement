@@ -17,7 +17,8 @@ public class WaitForLoginActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                startActivity(new Intent(WaitForLoginActivity.this, MainActivity.class));
+                Intent intent1 = new Intent(WaitForLoginActivity.this, MainActivity.class);
+                startActivity(intent1);
                 finish();
             }
         }, 3000);
