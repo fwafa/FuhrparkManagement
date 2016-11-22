@@ -1,4 +1,4 @@
-package com.student.fahrtenbuchapp.com.student.fahrtenbuchapp.models;
+package com.student.fahrtenbuchapp.models;
 
 /**
  * Created by Wafa on 15.11.2016.

@@ -1,7 +1,10 @@
-package com.student.fahrtenbuchapp.com.student.fahrtenbuchapp.models;
+package com.student.fahrtenbuchapp.models;
 
 
-import java.util.List;
+import android.graphics.drawable.Drawable;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 public class Model {
 
@@ -21,6 +24,54 @@ public class Model {
     private int battery;
     private boolean availability;
 
+    private Drawable imageButtonCar;
+    private Drawable thumbUp;
+    private Drawable thumbDown;
+    private Drawable imgBattery;
+
+    private Button resButton;
+
+
+
+    public Button getResButton() {
+        return resButton;
+    }
+
+    public void setResButton(Button resButton) {
+        this.resButton = resButton;
+    }
+
+    public Drawable getImgBattery() {
+        return imgBattery;
+    }
+
+    public void setImgBattery(Drawable imgBattery) {
+        this.imgBattery = imgBattery;
+    }
+
+    public Drawable getThumbUp() {
+        return thumbUp;
+    }
+
+    public void setThumbUp(Drawable thumbUp) {
+        this.thumbUp = thumbUp;
+    }
+
+    public Drawable getThumbDown() {
+        return thumbDown;
+    }
+
+    public void setThumbDown(Drawable thumbDown) {
+        this.thumbDown = thumbDown;
+    }
+
+    public Drawable getImageButtonCar() {
+        return imageButtonCar;
+    }
+
+    public void setImageButtonCar(Drawable imageButtonCar) {
+        this.imageButtonCar = imageButtonCar;
+    }
 
     public String getRole() {
         return role;

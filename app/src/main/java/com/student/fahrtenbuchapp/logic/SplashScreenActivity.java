@@ -1,4 +1,4 @@
-package com.student.fahrtenbuchapp;
+package com.student.fahrtenbuchapp.logic;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+
+import com.student.fahrtenbuchapp.R;
+import com.student.fahrtenbuchapp.login.LoginActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 

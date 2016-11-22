@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:background="#7eabc4">
+
+        <ImageButton
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/car_1"
+            android:id="@+id/imageButtonCar"
+            android:background="#a7a7ff"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/imageButtonCar"
+            android:layout_marginLeft="20dp"
+            android:text="Audi"
+            android:textSize="50sp"
+            android:textColor="#070b6b"
+            android:id="@+id/textViewVendor"/>
+
+        <TextView
+            android:id="@+id/textViewCarModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/imageButtonCar"
+            android:layout_below="@+id/textViewVendor"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:text="Model"
+            android:textSize="25sp"/>
+
+        <TextView
+            android:id="@+id/textViewBatteryLife"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/textViewBatteryPercentage"
+            android:layout_marginTop="30dp"
+            android:text="35"
+            android:textSize="30sp"/>
+
+        <TextView
+            android:id="@+id/textViewBatteryPercentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/imageViewBattery"
+            android:layout_marginTop="30dp"
+            android:text="%"
+            android:textSize="30sp"/>
+
+        <ImageView
+            android:id="@+id/imageViewBattery"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_alignParentRight="true"
+            app:srcCompat="@drawable/charged_battery"
+            android:layout_marginRight="30dp"/>
+
+        <TextView
+            android:id="@+id/textViewMileageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="180dp"
+            android:layout_marginTop="110dp"
+            android:text="Mileage: "
+            android:textSize="30sp"/>
+
+        <TextView
+            android:id="@+id/textViewMileage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="110dp"
+            android:text="12345 km"
+            android:textSize="30sp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/imageButtonCar"
+            android:layout_below="@+id/textViewVendor"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/relativeLayout2Car">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Availability"
+                android:id="@+id/textViewCarAvailability"
+                android:textSize="30sp"/>
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/textViewCarAvailability"
+                app:srcCompat="@drawable/ic_thumb_up_white"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="-30dp"
+                android:tint="#289407"
+                android:id="@+id/thumb_up"/>
+
+            <ImageView
+                android:id="@+id/thumb_down"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_toRightOf="@+id/thumb_up"
+                android:layout_below="@+id/textViewCarAvailability"
+                app:srcCompat="@drawable/ic_thumb_down_white"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="-30dp"
+                android:tint="#940e07"/>
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="70dp"
+                android:id="@+id/bookingButtonCar"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="40dp"
+                android:text="Reservation"
+                android:textSize="20sp"
+                android:textColor="#070b6b"
+                style="?android:attr/borderlessButtonStyle"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+</LinearLayout>

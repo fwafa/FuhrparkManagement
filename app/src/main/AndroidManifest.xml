@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".logic.SplashScreenActivity"
             android:theme="@style/FullScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,34 +22,34 @@
         </activity>
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".login.LoginActivity"
             android:theme="@style/FullScreenTheme" />
 
-        <activity android:name=".RegistrationActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".WaitForLoginActivity" />
+        <activity android:name=".login.RegistrationActivity" />
+        <activity android:name=".logic.ShowAllCarsActivity" />
+        <activity android:name=".login.WaitForLoginActivity" />
 
         <activity
-            android:name=".ReservationActivity"
+            android:name=".logic.ReservationActivity"
             android:label="@string/title_activity_reservation"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".logic.ShowAllCarsActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.student.fahrtenbuchapp.MainActivity" />
+                android:value="com.student.fahrtenbuchapp.logic.ShowAllCarsActivity" />
         </activity>
 
         <activity
-            android:name=".StartDrivingActivity"
-            android:parentActivityName=".MainActivity">
+            android:name=".logic.StartDrivingActivity"
+            android:parentActivityName=".logic.ShowAllCarsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.student.fahrtenbuchapp.MainActivity" />
+                android:value="com.student.fahrtenbuchapp.logic.ShowAllCarsActivity" />
         </activity>
 
         <activity android:name=".TokenActivity"
             android:label="Token Activity"
-            android:parentActivityName=".LoginActivity"
+            android:parentActivityName=".login.LoginActivity"
             android:theme="@style/AppTheme">
         </activity>
 

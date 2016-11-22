@@ -1,4 +1,4 @@
-package com.student.fahrtenbuchapp;
+package com.student.fahrtenbuchapp.login;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.student.fahrtenbuchapp.database.DBHelper;
+import com.student.fahrtenbuchapp.R;
 
 public class RegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 

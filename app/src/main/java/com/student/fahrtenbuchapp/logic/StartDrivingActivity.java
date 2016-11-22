@@ -1,10 +1,11 @@
-package com.student.fahrtenbuchapp;
+package com.student.fahrtenbuchapp.logic;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -19,12 +20,21 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.student.fahrtenbuchapp.com.student.fahrtenbuchapp.models.Model;
+import com.student.fahrtenbuchapp.R;
+import com.student.fahrtenbuchapp.login.LoginActivity;
+import com.student.fahrtenbuchapp.login.Session;
+import com.student.fahrtenbuchapp.models.Model;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,9 +47,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
+
+import static android.widget.TextClock.DEFAULT_FORMAT_24_HOUR;
 
 public class StartDrivingActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -47,19 +62,20 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
 
     private TextView tvRoleName, tvDriverName, textViewDateAndTime;
     private TextView textViewSetStartTime, textViewSetEndTime;
-
+    private EditText etStart, etDestination;
+    private Spinner spinnerStart, spinnerDestination;
     private Button startButton, stopButton;
-
     private Chronometer simpleChronometer;
-
     private SimpleDateFormat startingTime;
+    private TextClock textClock;
     private String currentTimeString;
-
     private String roleName, driverName, savedToken, id;
-
     private long time = 0;
 
     private Session session;
+
+    long date = System.currentTimeMillis();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,24 +87,80 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
             logout();
         }
 
+        etStart = (EditText) findViewById(R.id.etStart);
+        etDestination = (EditText) findViewById(R.id.etDestination);
+
+        spinnerStart = (Spinner) findViewById(R.id.spinnerStart);
+        spinnerDestination = (Spinner) findViewById(R.id.spinnerDestination);
+
+        textClock = (TextClock) findViewById(R.id.textClock);
         simpleChronometer = (Chronometer) findViewById(R.id.simpleChronometer);
 
         tvDriverName = (TextView) findViewById(R.id.nameTextView);
-        tvRoleName = (TextView) findViewById(R.id.tvRoleInfo);
 
         textViewDateAndTime = (TextView) findViewById(R.id.tvSetDate);
         textViewSetStartTime = (TextView) findViewById(R.id.tvSetStartTime);
         textViewSetEndTime = (TextView) findViewById(R.id.tvSetEndTime);
 
-        long date = System.currentTimeMillis();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy h:mm");
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<String>();
+        categories.add("FRA-UAS");
+        categories.add("Frankfurt Hbf");
+        categories.add("Frankfurt Airport");
+        categories.add("Palmengarten");
+        categories.add("EZB");
+        categories.add("Römer");
+        categories.add("Senckenberg Museum");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(R.layout.spinner_item);
+
+        // attaching data adapter to spinner
+        spinnerStart.setAdapter(dataAdapter);
+        spinnerDestination.setAdapter(dataAdapter);
+
+        spinnerStart.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                etStart.setText(item);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                etStart.setText("");
+            }
+        });
+
+        spinnerDestination.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                etDestination.setText(item);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                etDestination.setText("");
+            }
+        });
+
+
+        //TimeZone tz = TimeZone.getTimeZone("CET");
+        //DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ"); // Quoted "Z" to indicate CET, no timezone offset
+        //df.setTimeZone(tz);
+        //String nowAsISO = df.format(new Date());
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
         String dateString = sdf.format(date);
         textViewDateAndTime.setText(dateString);
 
-        startingTime = new SimpleDateFormat("h:mm");
-        currentTimeString = startingTime.format(date);
-        textViewSetStartTime.setText(currentTimeString);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            textClock.setTimeZone("CET");
+        }
 
         startButton = (Button) findViewById(R.id.buttonStart);
         stopButton = (Button) findViewById(R.id.buttonStop);
@@ -96,7 +168,7 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
         startButton.setOnClickListener(this);
         stopButton.setOnClickListener(this);
 
-        new JSONTaskUser().execute();
+        // new JSONTaskUser().execute();
     }
 
 
@@ -106,6 +178,11 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
         switch (v.getId())
         {
             case R.id.buttonStart:
+
+                startingTime = new SimpleDateFormat("h:mm");
+                currentTimeString = startingTime.format(date);
+                textViewSetStartTime.setText(currentTimeString);
+
                 startButton.setEnabled(false);
                 stopButton.setEnabled(true);
                 simpleChronometer.setBase(SystemClock.elapsedRealtime() + time);
@@ -113,20 +190,32 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
                 break;
 
             case R.id.buttonStop:
-                stopButton.setEnabled(false);
-                startButton.setEnabled(true);
-                time = simpleChronometer.getBase() - SystemClock.elapsedRealtime();
-                simpleChronometer.stop();
 
-                long date = System.currentTimeMillis();
-                startingTime = new SimpleDateFormat("h:mm");
-                currentTimeString = startingTime.format(date);
-                textViewSetEndTime.setText(currentTimeString);
 
-                if(isConnected())
-                    Toast.makeText(getApplicationContext(), "You are connected to the internet", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(getApplicationContext(), "You are NOT connected to the internet", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(StartDrivingActivity.this);
+                builder.setTitle("Stop route?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        stopButton.setEnabled(false);
+                        startButton.setEnabled(true);
+                        time = simpleChronometer.getBase() - SystemClock.elapsedRealtime();
+                        simpleChronometer.stop();
+
+                        long date = System.currentTimeMillis();
+                        startingTime = new SimpleDateFormat("h:mm");
+                        currentTimeString = startingTime.format(date);
+                        textViewSetEndTime.setText(currentTimeString);
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
 
                 break;
         }
@@ -135,7 +224,7 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
 
 
 
-    public class JSONTaskUser extends AsyncTask<String , String, List<Model>> {
+    /*public class JSONTaskUser extends AsyncTask<String , String, List<Model>> {
 
         @Override
         protected List<Model> doInBackground(String... params) {
@@ -224,7 +313,7 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
                 tvRoleName.setText(roleName);
             }
         }
-    }
+    } */
 
 
 

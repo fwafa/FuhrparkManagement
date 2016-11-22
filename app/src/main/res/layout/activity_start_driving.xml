@@ -6,27 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context="com.student.fahrtenbuchapp.StartDrivingActivity">
+    tools:context="com.student.fahrtenbuchapp.logic.StartDrivingActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"/>
 
-    <TextView
-        android:id="@+id/tvRoleInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Route Info"
-        android:textStyle="bold"
-        android:textSize="35dp"/>
 
     <RelativeLayout
         android:id="@+id/relativeLayoutName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvRoleInfo"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="30dp">
 
         <TextView
             android:id="@+id/tvName"
@@ -58,7 +46,7 @@
             android:id="@+id/tvDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Date"
+            android:text="Local Time"
             android:textSize="30sp"
             android:textColor="#000000"/>
 
@@ -70,6 +58,16 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="248dp"/>
+
+        <TextClock
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="450dp"
+            android:textSize="30sp"
+            android:textColor="#262fb4"
+            android:layout_alignBaseline="@+id/tvDate"
+            android:id="@+id/textClock"
+            tools:targetApi="jelly_bean_mr1" />
 
     </RelativeLayout>
 
@@ -125,6 +123,16 @@
         android:layout_marginTop="20dp"
         android:background="#161c96"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sepLine"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="120dp"
+        android:layout_marginTop="10dp"
+        android:text="POI"
+        android:textSize="30sp"/>
+
     <RelativeLayout
         android:id="@+id/relativeLayoutStart"
         android:layout_width="match_parent"
@@ -149,14 +157,23 @@
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/imageViewStart"/>
 
-        <TextView
-            android:id="@+id/tvSetStart"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/etStart"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Frankfurt"
+            android:hint="type here"
             android:textSize="30sp"
             android:textStyle="italic"
             android:layout_toRightOf="@+id/tvStart"
+            android:layout_marginLeft="150dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerStart"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:scrollbarSize="30sp"
+            android:layout_toRightOf="@+id/etStart"
+            android:layout_alignBaseline="@+id/etStart"
             android:layout_marginLeft="150dp"/>
 
     </RelativeLayout>
@@ -185,15 +202,23 @@
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/imageViewDestination"/>
 
-        <TextView
-            android:id="@+id/tvSetDestination"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/etDestination"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Darmstadt"
+            android:hint="type here"
             android:textSize="30sp"
             android:textStyle="italic"
             android:layout_toRightOf="@+id/tvDestination"
             android:layout_marginLeft="60dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerDestination"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/etDestination"
+            android:layout_alignBaseline="@+id/etDestination"
+            android:layout_marginLeft="150dp"/>
 
     </RelativeLayout>
 
@@ -272,7 +297,7 @@
         android:id="@+id/tvTimeElapsed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="  Elapsed\n    Time"
+        android:text="       Time"
         android:textSize="30sp"
         android:textColor="#000000"
         android:layout_below="@+id/sepLine3"
@@ -280,10 +305,19 @@
         android:layout_marginLeft="60dp"/>
 
     <TextView
+        android:text="Elapsed"
+        android:textSize="30sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sepLine3"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="320dp"/>
+
+    <TextView
         android:id="@+id/tvTimeKiloElapsed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="  Elapsed\nKilometers"
+        android:text=" Kilometers"
         android:textSize="30sp"
         android:textColor="#000000"
         android:layout_below="@+id/sepLine3"

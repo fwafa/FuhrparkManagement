@@ -1,10 +1,9 @@
-package com.student.fahrtenbuchapp;
+package com.student.fahrtenbuchapp.login;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,24 +15,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.student.fahrtenbuchapp.com.student.fahrtenbuchapp.models.Model;
+import com.student.fahrtenbuchapp.database.DBHelper;
+import com.student.fahrtenbuchapp.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -43,16 +37,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private DBHelper db;
     private Session session;
 
-    private String name, surname, password, username;
+    private String password, username;
 
     private EditText etUser, etPass;
 
     private String myToken;
 
-    public static final String MyPREFERENCES = "MyPrefs";
-    public static final String Name = "name_key";
-    public static final String Surname = "surname_key";
-    SharedPreferences sharedPreferences;
+    private Context context;
+    private ProgressDialog dialog;
+
+    private URL url;
+    private HttpURLConnection connection;
+    private BufferedReader bufferedReader;
+    private String message;
+
+    private AsyncTask.Status status;
 
 
     @Override
@@ -95,8 +94,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 username = etUser.getText().toString();
                 password = etPass.getText().toString();
 
-                JSONTaskPostLogin postLogin = new JSONTaskPostLogin();
-                postLogin.execute(username, password);
+                JSONTaskPostLogin jsonTaskPostLogin = new JSONTaskPostLogin();
+                jsonTaskPostLogin.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, username, password);
+
+                //JSONTaskGetUser jsonTaskGetUser = new JSONTaskGetUser();
+                //jsonTaskGetUser.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 
                 break;
             case R.id.btnRegister:
@@ -109,11 +111,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
     public class JSONTaskPostLogin extends AsyncTask<String , String, String> {
-
-        URL url = null;
-        HttpURLConnection connection = null;
-        BufferedReader bufferedReader = null;
-        String message = null;
 
         @Override
         protected String doInBackground(String... params) {
@@ -153,13 +150,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         sb.append(line + "\n");
                     }
 
+                    myToken = sb.toString();
+                    System.out.println("JSONTaskPostLogin myToken: " + myToken);
+
                     bufferedReader.close();
 
                 } else
-                    System.out.println(connection.getResponseMessage());
+                    System.out.println("connection response: " + connection.getResponseMessage());
 
                 return sb.toString();
-
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -179,21 +178,28 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            myToken = result;
+            String username = etUser.getText().toString();
+            String password = etPass.getText().toString();
+
+            if (username.equals("Admin")
+                    && password.equals("1234567890")) {
+                session.setLoggedin(true);
+                Intent intent = new Intent(LoginActivity.this, WaitForLoginActivity.class);
+                startActivity(intent);
+                finish();
+            } else if (username.length() == 0) {
+                etUser.setError("Enter Username");
+            } else if (password.length() == 0) {
+                etPass.setError("Enter Password");
+            } else {
+                Toast.makeText(getApplicationContext(), "Wrong username/password", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 
 
-    public class JSONTaskGetUser extends AsyncTask<String , String, List<Model>> {
-
-        String savedToken = null;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            savedToken = myToken;
-        }
+    /*public class JSONTaskGetUser extends AsyncTask<String , String, List<Model>> {
 
         @Override
         protected List<Model> doInBackground(String... params) {
@@ -204,43 +210,47 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             try {
                 URL url = new URL("http://10.18.2.151:3000/api/user");
                 connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestProperty("Accept-Language", "en-US");
-                connection.setRequestProperty("Content-type", "application/json; charset=UTF-8");
-                connection.setRequestProperty("Authorization", "Bearer " + savedToken);
-                connection.setConnectTimeout(20000);
-                connection.setReadTimeout(20000);
+                String token = myToken;
+                System.out.println("doInBackground: " + token);
+                connection.setRequestMethod("GET");
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
+                connection.setInstanceFollowRedirects(false);
+                connection.setRequestProperty("Authorization", "Bearer " + token);
+                connection.setRequestProperty("Content-type", "application/json; charset=UTF-8");
                 connection.connect();
 
-                InputStream inputStream = connection.getInputStream();
-                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                StringBuffer stringBuffer = new StringBuffer();
-                String line = "";
-                while ((line = bufferedReader.readLine()) != null)
-                {
-                    stringBuffer.append(line);
+                if(connection.getResponseCode() == HttpURLConnection.HTTP_ACCEPTED) {
+
+                    InputStream inputStream = connection.getInputStream();
+                    bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                    StringBuffer stringBuffer = new StringBuffer();
+                    String line = "";
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuffer.append(line);
+                    }
+
+                    String finalJSONText = stringBuffer.toString();
+                    JSONArray parentArray = new JSONArray(finalJSONText);
+
+                    List<Model> userList = new ArrayList<>();
+                    for (int i = 0; i < parentArray.length(); i++) {
+                        JSONObject finalObject = parentArray.getJSONObject(i);
+
+                        Model userModel = new Model();
+                        userModel.setName(finalObject.getString("name"));
+                        userModel.setRole(finalObject.getString("role"));
+                        userModel.setUsername(finalObject.getString("username"));
+                        userModel.setId(finalObject.getString("_id"));
+
+                        userList.add(userModel);
+                        //db.addUser(userList.get(i).getUsername(), userList.get(i).getPassword());
+                    }
+
+                    return userList;
                 }
-
-                String finalJSONText = stringBuffer.toString();
-                JSONArray parentArray = new JSONArray(finalJSONText);
-
-                List<Model> userList = new ArrayList<>();
-                for(int i=0; i<parentArray.length(); i++)
-                {
-                    JSONObject finalObject = parentArray.getJSONObject(i);
-
-                    Model userModel = new Model();
-                    userModel.setName(finalObject.getString("name"));
-                    userModel.setRole(finalObject.getString("role"));
-                    userModel.setUsername(finalObject.getString("username"));
-                    userModel.setId(finalObject.getString("_id"));
-
-                    userList.add(userModel);
-                    //db.addUser(userModelList.get(i).getUsername(), userModelList.get(i).getPassword());
-                }
-
-                return userList;
+                else
+                    System.out.println(connection.getResponseMessage() + connection.getResponseCode());
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -249,10 +259,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             } catch (JSONException e) {
                 e.printStackTrace();
             } finally {
-                if(connection != null)
+                if (connection != null)
                     connection.disconnect();
                 try {
-                    if(bufferedReader != null)
+                    if (bufferedReader != null)
                         bufferedReader.close();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -262,39 +272,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             return null;
         }
 
-
         @Override
         protected void onPostExecute(List<Model> result) {
             super.onPostExecute(result);
 
-            etUser = (EditText) findViewById(R.id.etUsername);
-            etPass = (EditText) findViewById(R.id.etPassword);
 
             String username = etUser.getText().toString();
             String password = etPass.getText().toString();
 
-            if (username.equals("Administrator")
-                        && password.equals("1234567890"))
-                {
+            for (int i = 0; i < result.size(); i++) {
+
+                System.out.println("JSONTaskGetUser result: " + result.get(i).toString());
+
+                if (result.get(i).getUsername().equals(username)
+                        && password.equals("1234567890")) {
                     session.setLoggedin(true);
                     Intent intent = new Intent(LoginActivity.this, WaitForLoginActivity.class);
                     startActivity(intent);
                     finish();
-                }
-
-                else if (username.length() == 0)
-                {
+                } else if (username.length() == 0) {
                     etUser.setError("Enter Username");
-                }
-                else if (password.length() == 0)
-                {
+                } else if (password.length() == 0) {
                     etPass.setError("Enter Password");
-                }
-                else {
+                } else {
                     Toast.makeText(getApplicationContext(), "Wrong username/password", Toast.LENGTH_SHORT).show();
                 }
-
-
+            }
         }
-    }
+
+    } */
 }
