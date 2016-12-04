@@ -15,7 +15,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String TAG = DBHelper.class.getSimpleName();
 
-    public static final String DB_NAME = "dirver_log_app.db";
+    public static final String DB_NAME = "driver_log_app.db";
     public static final int DB_VERSION = 1;
 
     public static final String USER_TABLE = "users";
