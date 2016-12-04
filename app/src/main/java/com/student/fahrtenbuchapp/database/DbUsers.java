@@ -34,7 +34,7 @@ class DbUsers extends SQLiteOpenHelper {
             + COLUMN_FIRSTNAME + " TEXT," + COLUMN_LASTNAME + " TEXT,"
             + COLUMN_EMAIL + " TEXT," + COLUMN_PHONE + " TEXT,"
             + COLUMN_ROLE + " TEXT,";
-
+//
 
 
     public DbUsers(Context context) {

@@ -10,7 +10,7 @@ import android.util.Log;
 /**
  * Created by Mojdeh.aaz on 29.11.2016.
  */
-
+//
 public
 class DbCars extends SQLiteOpenHelper{
     public static final String TAG = DBHelper.class.getSimpleName();

@@ -22,7 +22,7 @@ public class DbLogin extends SQLiteOpenHelper {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_USERNAME = "username";
     public static final String COLUMN_PASS = "password";
-
+//
 
     public static final String CREATE_TABLE_LOGIN = "CREATE TABLE " + LOGIN_TABLE + "("
             + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
