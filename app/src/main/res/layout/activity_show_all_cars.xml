@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/listViewCars"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/m_background3"
+    tools:context="com.student.fahrtenbuchapp.logic.ShowAllCarsActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+
+        <ImageView
+            android:id="@+id/imView"
+            app:srcCompat="@drawable/blue_car"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:id="@+id/allCarsTextViewTitle"
+            android:text="In welchem Auto sitzen Sie?"
+            android:textSize="40sp"
+            android:textColor="#ffffff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:scrollbars="vertical"
+            app:rrvIsRefreshable="false"
+            app:rrvLayoutType="LinearLayout">
+
+        </co.moonmonkeylabs.realmrecyclerview.RealmRecyclerView>
+
+    </RelativeLayout>
+
+</RelativeLayout>

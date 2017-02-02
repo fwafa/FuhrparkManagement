@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('stetho_realm-2.0.0.aar'))

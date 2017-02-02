@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.student.fahrtenbuchapp">
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name="com.student.fahrtenbuchapp.dataSync.App"
+        android:allowBackup="true"
+        android:icon="@drawable/fmlogo_xhdpi"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".login.SplashScreenActivity"
+            class=".login.SplashScreenActivity"
+            android:theme="@style/FullScreenTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".login.LoginActivity"
+            android:parentActivityName=".login.SliderActivity"
+            android:theme="@style/FullScreenTheme" />
+        <activity
+            android:name=".logic.ShowAllCarsActivity"
+            android:theme="@style/FullScreenTheme" />
+        <activity
+            android:name=".login.WaitForLoginActivity"
+            android:theme="@style/FullScreenTheme" />
+        <activity android:name=".logic.StartDrivingActivity" />
+        <activity android:name=".login.SliderActivity" />
+        <activity
+            android:name=".logic.AddressActivity"
+            android:parentActivityName=".logic.StartDrivingActivity"
+            android:theme="@style/FullScreenTheme" />
+        <activity
+            android:name=".logic.SummaryActivity"
+            android:theme="@style/FullScreenTheme" />
+    </application>
+
+</manifest>

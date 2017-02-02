@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@drawable/row_shape">
+
+        <ImageButton
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/row_car"
+            android:id="@+id/imageViewCar"
+            android:background="@drawable/round_corner"
+            android:scaleType="centerCrop"
+            android:elevation="0dp" />
+
+        <TextView
+            android:id="@+id/tvVendor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/imageViewCar"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="80dp"
+            android:text="Audi"
+            android:textSize="50sp"
+            android:textColor="#2229c1"
+            />
+
+        <TextView
+            android:id="@+id/tvModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tvVendor"
+            android:layout_marginLeft="50dp"
+            android:text="Model"
+            android:layout_alignBaseline="@+id/tvVendor"
+            android:textColor="#973000"
+            android:textSize="40sp"
+            android:textStyle="italic"
+            style="@style/Base.TextAppearance.AppCompat.Widget.ActionMode.Title"/>
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

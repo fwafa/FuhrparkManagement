@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_start_driving"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@drawable/background2"
+    tools:context="com.student.fahrtenbuchapp.logic.StartDrivingActivity">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutUserAndDate"
+            android:background="@drawable/my_shape"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="65dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <LinearLayout
+                android:id="@+id/relativeLayoutName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/userImageView"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    app:srcCompat="@drawable/ic_person_black" />
+
+                <TextView
+                    android:id="@+id/nameTextView"
+                    android:text="Max Mustermann"
+                    android:textSize="30sp"
+                    android:textColor="#9ce9ff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="15dp"/>
+
+            </LinearLayout>
+
+            <DigitalClock
+                android:id="@+id/digital_clock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="15dp"
+                android:textSize="30sp"
+                android:textColor="#9ce9ff"
+                android:paddingRight="10dp"/>
+
+            <TextView
+                android:id="@+id/tvSetDate"
+                android:text="01.01.2017"
+                android:textSize="30sp"
+                android:textColor="#9ce9ff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:paddingRight="10dp"
+                android:layout_below="@+id/digital_clock"
+                />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relativeLayoutUserAndDate"
+            android:layout_marginTop="30dp">
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fahrtdauer"
+                android:textSize="30sp"
+                android:textColor="#abb6ff"/>
+
+            <TextView
+                android:id="@+id/tvSetStartTime"
+                android:text="00:00"
+                android:textSize="30sp"
+                android:textColor="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tvTime"
+                android:layout_marginLeft="40dp"/>
+
+            <TextView
+                android:id="@+id/bindestrich"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/tvSetStartTime"
+                android:text="-"
+                android:textColor="#ffffff"
+                android:textSize="30sp"
+                android:layout_marginLeft="20dp"/>
+
+            <TextView
+                android:id="@+id/tvSetEndTime"
+                android:text="00:00"
+                android:textSize="30sp"
+                android:textColor="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/bindestrich"
+                android:layout_marginLeft="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="POI"
+                android:textSize="30sp"
+                android:textColor="#abb6ff"
+                android:layout_alignParentRight="true" />
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/sepLine"
+            android:layout_below="@id/relativeLayoutTime"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="20dp"
+            android:background="#ff0900"/>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sepLine"
+            android:layout_marginTop="30dp">
+
+            <ImageView
+                android:id="@+id/imageViewStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tint="#34ff38"
+                app:srcCompat="@android:drawable/btn_default" />
+
+            <TextView
+                android:id="@+id/tvStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Von"
+                android:textSize="30sp"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/imageViewStart"/>
+
+            <TextView
+                android:id="@+id/tvStartPosition"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:textColor="#ffffff"
+                android:textStyle="italic"
+                android:layout_toRightOf="@+id/tvStart"
+                android:layout_marginLeft="58dp"
+                android:layout_alignBaseline="@+id/tvStart"
+                android:background="#329cff9c"/>
+
+            <Spinner
+                android:id="@+id/spinnerStartPosition"
+                android:layout_width="390dp"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tvStart"
+                android:layout_marginLeft="50dp"
+                android:textColor="#000000" />
+
+            <Switch
+                android:text="Als POI "
+                android:textSize="20sp"
+                android:textColor="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:id="@+id/switchStart" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutDestination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relativeLayoutStart"
+            android:layout_marginTop="20dp">
+
+            <ImageView
+                android:id="@+id/imageViewDestination"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tint="#ff3748"
+                app:srcCompat="@android:drawable/btn_default" />
+
+            <TextView
+                android:id="@+id/tvDestination"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nach"
+                android:textSize="30sp"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/imageViewDestination"/>
+
+            <TextView
+                android:id="@+id/tvDestinationPosition"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:textStyle="italic"
+                android:textColor="#ffffff"
+                android:layout_toRightOf="@+id/tvDestination"
+                android:layout_marginLeft="40dp"
+                android:layout_alignBaseline="@+id/tvDestination"
+                android:background="#48a93f3f"/>
+
+            <Spinner
+                android:id="@+id/spinnerStopPosition"
+                android:layout_width="390dp"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tvDestination"
+                android:layout_marginLeft="30dp"
+                android:textColor="#000000" />
+
+            <Switch
+                android:text="Als POI "
+                android:textSize="20sp"
+                android:textColor="#ffffff"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:id="@+id/switchDestination" />
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/sepLine2"
+            android:layout_below="@id/relativeLayoutDestination"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="20dp"
+            android:background="#ff0900"/>
+
+        <TextView
+            android:id="@+id/tvKiloCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kilometerzähler"
+            android:textSize="30sp"
+            android:textColor="#abb6ff"
+            android:layout_below="@+id/sepLine2"
+            android:layout_marginTop="30dp"/>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutKiloCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvKiloCounter"
+            android:layout_marginTop="25dp">
+
+            <TextView
+                android:id="@+id/tvKiloCounterStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start: "
+                android:textColor="#ffffff"
+                android:textSize="30sp"/>
+
+            <EditText
+                android:id="@+id/etSetKiloStart"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:background="#4bcae5e7"
+                android:hint="km eingeben"
+                android:textColorHint="#a5ffffff"
+                android:textSize="30sp"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/tvKiloCounterStart"
+                android:layout_alignBaseline="@+id/tvKiloCounterStart"/>
+
+            <TextView
+                android:id="@+id/tvKiloCounterStop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/etSetKiloStart"
+                android:layout_marginLeft="100dp"
+                android:text="Ende: "
+                android:textColor="#ffffff"
+                android:textSize="30sp"/>
+
+            <EditText
+                android:id="@+id/etSetKiloStop"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:textColorHint="#a5ffffff"
+                android:hint="km eingeben"
+                android:background="#4bcae5e7"
+                android:textSize="30sp"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@+id/tvKiloCounterStop"
+                android:layout_alignBaseline="@+id/tvKiloCounterStop"/>
+
+        </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tvKwhCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Batteriestand"
+        android:textSize="30sp"
+        android:textColor="#abb6ff"
+        android:layout_below="@+id/relativeLayoutKiloCounter"
+        android:layout_marginTop="30dp"/>
+
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutKwh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvKwhCounter"
+        android:layout_marginTop="25dp">
+
+        <TextView
+            android:id="@+id/tvKwhCounterStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start: "
+            android:textColor="#ffffff"
+            android:textSize="30sp"/>
+
+        <EditText
+            android:id="@+id/etSetKwhStart"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:background="#4bcae5e7"
+            android:hint="kWh eingeben"
+            android:textColorHint="#a5ffffff"
+            android:textSize="30sp"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tvKwhCounterStart"
+            android:layout_alignBaseline="@+id/tvKwhCounterStart"/>
+
+        <TextView
+            android:id="@+id/tvKwhCounterStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/etSetKwhStart"
+            android:layout_marginLeft="100dp"
+            android:text="Ende: "
+            android:textColor="#ffffff"
+            android:textSize="30sp"/>
+
+        <EditText
+            android:id="@+id/etSetKwhStop"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:textColorHint="#a5ffffff"
+            android:hint="kWh eingeben"
+            android:background="#4bcae5e7"
+            android:textSize="30sp"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/tvKwhCounterStop"
+            android:layout_alignBaseline="@+id/tvKwhCounterStop"/>
+
+    </RelativeLayout>
+
+
+    <View
+            android:id="@+id/sepLine3"
+            android:layout_below="@id/relativeLayoutKwh"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="40dp"
+            android:background="#ff0900"/>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sepLine3"
+            android:layout_marginTop="30dp">
+
+            <TextView
+                android:id="@+id/tvTimeKiloElapsed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Distanz"
+                android:textSize="30sp"
+                android:textColor="#ffffff"/>
+
+            <TextView
+                android:id="@+id/tvSetKiloElapsed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tvTimeKiloElapsed"
+                android:layout_marginLeft="50dp"
+                android:text="0 km"
+                android:textColor="#ffffff"
+                android:textSize="30sp"/>
+
+            <EditText
+                android:id="@+id/etNotes"
+                android:layout_width="420dp"
+                android:layout_height="150dp"
+                android:layout_alignParentRight="true"
+                android:hint="  Notizen"
+                android:textColorHint="#a5ffffff"
+                android:textColor="#ffffff"
+                android:textSize="30sp"
+                android:background="#3a7faad9"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/my_shape_2">
+
+            <Button
+                android:text="Start"
+                android:textSize="30sp"
+                android:textColor="#64ff5f"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="30dp"
+                style="?android:attr/borderlessButtonStyle"
+                android:id="@+id/buttonStart" />
+
+            <Button
+                android:text="Stop"
+                android:textSize="30sp"
+                android:textColor="#e90000"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"
+                style="?android:attr/borderlessButtonStyle"
+                android:id="@+id/buttonStop" />
+
+        </RelativeLayout>
+
+</RelativeLayout>
+
+

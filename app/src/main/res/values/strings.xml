@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Fahrtenbuch App</string>
+    <string name="title_activity_reservation">Reservation</string>
+    <string name="title_activity_location">Location</string>
+
+    <string name="title_activity_welcome">Home Screen</string>
+    <string name="next">VOR</string>
+    <string name="skip">ÜBERSPRINGEN</string>
+    <string name="start">OK</string>
+
+    <string name="slide_1_title">Willkommen</string>
+    <string name="slide_1_desc">Das Fahrtenbuch-App der FRA-UAS!</string>
+
+    <string name="slide_2_title">Einfache Bedienung</string>
+    <string name="slide_2_desc">Dieses App nimmt Ihnen viel Arbeit ab!</string>
+
+    <string name="slide_3_title">Konto vorhanden?</string>
+    <string name="slide_3_desc">Bevor Sie loslegen können, brauchen Sie ein Nutzerkonto!\n Falls nein, wenden Sie sich bitte an den Administrator!</string>
+
+    <string name="slide_4_title">Der letzte Schritt</string>
+    <string name="slide_4_desc">Um die Daten zwischen Gerät und Server zu\nsynchronisieren, muss in regelmäßigen Abständen\neine Internetverbindung hergestellt werden.\n\nZum Synchronisieren einfach oben\nrechts auf Update klicken!</string>
+
+    <string name="play_again_desc">To see the welcome slider again, goto Settings -> apps -> welcome slider -> clear data</string>
+    <string name="play_again">Play Again</string>
+</resources>
