@@ -32,12 +32,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.student.fahrtenbuchapp.R;
+import com.student.fahrtenbuchapp.dataSync.DriveToJSONConverter;
 import com.student.fahrtenbuchapp.dataSync.RestClient;
 import com.student.fahrtenbuchapp.logic.ShowAllCarsActivity;
 import com.student.fahrtenbuchapp.models.Credentials;
 import com.student.fahrtenbuchapp.models.Drive;
 import com.student.fahrtenbuchapp.models.Token;
+
+import org.json.JSONObject;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -56,6 +62,7 @@ public class SliderActivity extends AppCompatActivity {
 
     private Realm realm;
     private RestClient restClient = new RestClient();
+    private DriveToJSONConverter driveToJSONConverter;
 
     ProgressDialog progressDialog;
 
@@ -283,6 +290,22 @@ public class SliderActivity extends AppCompatActivity {
 
         switch (item.getItemId())
         {
+            case R.id.delete:
+                realm = Realm.getDefaultInstance();
+                final RealmResults<Drive> myDrives = realm.where(Drive.class).findAll();
+
+                if(!myDrives.isEmpty())
+                {
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+
+                            myDrives.deleteAllFromRealm();
+                        }
+                    });
+                }
+                break;
+
             case R.id.refresh:
 
                 ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -321,7 +344,41 @@ public class SliderActivity extends AppCompatActivity {
                     final RealmResults<Drive> drives = realm.where(Drive.class).findAll();
                     if(!drives.isEmpty()) {
 
-                        for(int i=0; i<drives.size(); i++)
+                        driveToJSONConverter = new DriveToJSONConverter();
+                        JSONObject driveToJson = driveToJSONConverter.DriveToJson(drives.get(0));
+                        System.out.println("JSON Object: " + driveToJson.toString());
+
+                        restClient.postJsonDrive(getApplicationContext(), driveToJson, myTokens.get(0));
+
+                        /*driveToJSONConverter = new DriveToJSONConverter();
+                        JSONObject driveToJson = driveToJSONConverter.DriveToJson(drives.get(0));
+
+                        System.out.println("JSON Object: " + driveToJson.toString());
+
+                        Drive drive = new Drive();
+                        drive.setUser("Farhad");
+                        drive.setCar("Volvo");
+                        drive.setStartDate("1.1.2017");
+                        drive.setEndDate("2.2.2017");
+                        drive.setStartAddress(null);
+                        drive.setEndAddress(null);
+                        drive.setStartCoord(null);
+                        drive.setEndCoord(null);
+                        drive.setStartPOI("München");
+                        drive.setEndPOI("Berlin");
+                        drive.setStartMileage(23000);
+                        drive.setEndMileage(23800);
+                        drive.setUsedkWh(2500.0);
+
+                        Gson gson = new Gson();
+                        //String gsonString = gson.toJson(driveToJson);
+                        System.out.println(gson.toJson(drives.get(0)));
+
+                        restClient.postJsonDrive(getApplicationContext(), driveToJson, myTokens.get(0));*/
+
+                        //restClient.postDrive(getApplicationContext(), drives.get(0), myTokens.get(0));
+
+                        /*for(int i=0; i<drives.size(); i++)
                         {
                             if(        drives.get(i).getUser() != null
                                     && drives.get(i).getCar() != null
@@ -337,11 +394,11 @@ public class SliderActivity extends AppCompatActivity {
                             {
                                 restClient.postDrive(getApplicationContext(), drives.get(i), myTokens.get(0));
                             }
-                        }
+                        }*/
                     }
                     else
                     {
-                        Toast toast = Toast.makeText(SliderActivity.this, "Daten konnten nicht übermittelt werden", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(SliderActivity.this, "Daten konnten nicht übermittelt werden\nDaten unvollständig!", Toast.LENGTH_SHORT);
                         View toastView = toast.getView(); //This'll return the default View of the Toast.
 
                         /* And now you can get the TextView of the default View of the Toast. */
@@ -383,6 +440,8 @@ public class SliderActivity extends AppCompatActivity {
 
                     alertDialog.show();
                 }
+
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

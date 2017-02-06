@@ -7,18 +7,32 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
 import com.student.fahrtenbuchapp.R;
+import com.student.fahrtenbuchapp.models.Drive;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import io.realm.Realm;
 
 
@@ -39,6 +53,7 @@ public class SummaryActivity extends AppCompatActivity implements View.OnClickLi
     private String notes;
 
     private long date = System.currentTimeMillis();
+    final static String ISO8601DATEFORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSZ";
 
 
     @Override
@@ -117,8 +132,21 @@ public class SummaryActivity extends AppCompatActivity implements View.OnClickLi
             tvNotes.setText("");
 
         tvCurrentDate.setText(dateString);
-    }
 
+
+        ISO8601DateFormat iso8601DateFormat = new ISO8601DateFormat();
+        String startTimeNowAsISO = iso8601DateFormat.format(new Date());
+        try
+        {
+            Date date = iso8601DateFormat.parse(startTimeNowAsISO);
+            System.out.println("Date: " + date);
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+    }
 
 
     @Override

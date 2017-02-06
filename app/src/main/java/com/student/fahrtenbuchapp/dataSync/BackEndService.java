@@ -6,6 +6,8 @@ import com.student.fahrtenbuchapp.models.Drive;
 import com.student.fahrtenbuchapp.models.Token;
 import com.student.fahrtenbuchapp.models.User;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -31,6 +33,11 @@ public interface BackEndService {
     @GET("cars/{car}")
     Call<ArrayList<Car>> listCars(@Path("car") String car);
 
+    @Headers("Content-Type: application/json")
     @POST("drives")
     Call<Drive> postDrive(@Header("Authorization") String token, @Body Drive drive);
+
+    @Headers("Content-Type: application/json")
+    @POST("drives")
+    Call<Drive> postJsonDrive(@Header("Authorization") String token, @Body JSONObject body);
 }

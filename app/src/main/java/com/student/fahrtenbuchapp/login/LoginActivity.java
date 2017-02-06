@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.student.fahrtenbuchapp.R;
 import com.student.fahrtenbuchapp.dataSync.RestClient;
+import com.student.fahrtenbuchapp.logic.StartDrivingActivity;
+import com.student.fahrtenbuchapp.models.Car;
 import com.student.fahrtenbuchapp.models.Credentials;
 import com.student.fahrtenbuchapp.models.Token;
 import com.student.fahrtenbuchapp.models.TokenData;
@@ -58,6 +60,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        SharedPreferences carPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor carEditor = carPreferences.edit();
+
         Animation from_up_to_down = AnimationUtils.loadAnimation(this, R.anim.move_from_right);
         TextView textView = (TextView) findViewById(R.id.textViewLogin);
         textView.setAnimation(from_up_to_down);
@@ -70,6 +75,17 @@ public class LoginActivity extends AppCompatActivity {
         etPass = (EditText) findViewById(R.id.etPassword);
 
         login = (Button) findViewById(R.id.btnLogin);
+
+        realm = Realm.getDefaultInstance();
+        RealmResults<Car> carRealmResults = realm.where(Car.class).findAll();
+        if(!carRealmResults.isEmpty())
+        {
+            Car car = carRealmResults.get(0);
+
+            carEditor.putString("vendor", car.getVendor());
+            carEditor.putString("model", car.getModel());
+            carEditor.apply();
+        }
 
         new MyAsyncTask().execute();
     }

@@ -1,5 +1,6 @@
 package com.student.fahrtenbuchapp.models;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
@@ -18,7 +19,6 @@ public class AddressStart extends RealmObject {
 
     @SerializedName("street")
     private String street;
-
 
     public String getCountry() {
         return country;

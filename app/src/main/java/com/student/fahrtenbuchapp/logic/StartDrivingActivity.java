@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -33,6 +34,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.google.gson.Gson;
 import com.student.fahrtenbuchapp.R;
 import com.student.fahrtenbuchapp.login.LoginActivity;
 import com.student.fahrtenbuchapp.models.AddressStart;
@@ -483,9 +486,7 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
                     SimpleDateFormat startingTime = new SimpleDateFormat("HH:mm", Locale.GERMAN);
                     Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-                    TimeZone timeZone = TimeZone.getTimeZone("CET");
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SSSZ");
-                    dateFormat.setTimeZone(timeZone);
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault());
                     startTimeNowAsISO = dateFormat.format(new Date());
 
                     try {
@@ -605,9 +606,7 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
                             SimpleDateFormat startingTime = new SimpleDateFormat("HH:mm", Locale.GERMAN);
                             Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
-                            TimeZone timeZone = TimeZone.getTimeZone("CET");
-                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sssZ");
-                            dateFormat.setTimeZone(timeZone);
+                            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault());
                             stopTimeNowAsISO = dateFormat.format(new Date());
                             try {
                                 stopDate = dateFormat.parse(stopTimeNowAsISO);
@@ -722,7 +721,6 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
                                                 .equalTo("country", myStopAddress.getCountry())
                                                 .findFirst();
 
-
                                 realm.executeTransaction(new Realm.Transaction() {
                                     @Override
                                     public void execute(Realm realm) {
@@ -731,8 +729,8 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
 
                                         drive.setUser(currentUser.get_id());
                                         drive.setCar(car.get_id());
-                                        drive.setStartDate(startDate);
-                                        drive.setEndDate(stopDate);
+                                        drive.setStartDate(startTimeNowAsISO);
+                                        drive.setEndDate(stopTimeNowAsISO);
                                         drive.setStartCoord(finalLocationStart);
                                         drive.setEndCoord(finalLocationStop);
                                         drive.setStartAddress(finalAddressStart);
@@ -745,10 +743,11 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
 
                                         double kwhEnd = Double.parseDouble(etSetKwhStop.getText().toString());
                                         double kwhSta = Double.parseDouble(etSetKwhStart.getText().toString());
-                                        double kwhFinal = kwhEnd - kwhSta;
+                                        double kwhFinal = kwhSta - kwhEnd;
+
+                                        Log.d("kwhFinal: ", String.valueOf(kwhFinal));
 
                                         drive.setUsedkWh(kwhFinal);
-
 
                                         SimpleDateFormat finalStartingTime = new SimpleDateFormat("HH:mm", Locale.GERMAN);
                                         SimpleDateFormat finalStopingTime = new SimpleDateFormat("HH:mm", Locale.GERMAN);
@@ -767,7 +766,7 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
                                         intent.putExtra("stopDate", finalStopingTime.format(stopDate));
                                         intent.putExtra("kmStart", etKiloStart.getText().toString());
                                         intent.putExtra("kmStop", etKiloEnd.getText().toString());
-                                        intent.putExtra("kwh", kwhFinal);
+                                        intent.putExtra("kwh", String.valueOf(kwhFinal));
                                         intent.putExtra("notes", etNotes.getText().toString());
 
 
@@ -787,7 +786,7 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
                                 @Override
                                 public void run() {
 
-                                    Toast toast = Toast.makeText(StartDrivingActivity.this, "Daten konnten nicht übermittelt werden", Toast.LENGTH_SHORT);
+                                    Toast toast = Toast.makeText(StartDrivingActivity.this, "Daten erfolgreich gespeichert!", Toast.LENGTH_SHORT);
                                     View toastView = toast.getView(); //This'll return the default View of the Toast.
 
                                     /* And now you can get the TextView of the default View of the Toast. */

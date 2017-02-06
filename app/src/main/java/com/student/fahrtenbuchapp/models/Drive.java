@@ -11,20 +11,51 @@ import io.realm.RealmObject;
 
 public class Drive extends RealmObject{
 
+    @SerializedName("user")
     private String user;
+    @SerializedName("car")
     private String car;
-    private Date startDate;
-    private Date endDate;
+    @SerializedName("startDate")
+    private String startDate;
+    @SerializedName("endDate")
+    private String endDate;
+    @SerializedName("startCoord")
     private LocationStart startCoord;
+    @SerializedName("endCoord")
     private LocationStop endCoord;
+    @SerializedName("startAddress")
     private AddressStart startAddress;
+    @SerializedName("endAddress")
     private AddressStop endAddress;
+    @SerializedName("startPOI")
     private String startPOI;
+    @SerializedName("endPOI")
     private String endPOI;
+    @SerializedName("startMileage")
     private Integer startMileage;
+    @SerializedName("endMileage")
     private Integer endMileage;
+    @SerializedName("usedkwh")
     private Double usedkWh;
 
+
+    public Drive(){}
+
+    public Drive(String user, String car, String startDate, String endDate, LocationStart startCoord, LocationStop endCoord, AddressStart startAddress, AddressStop endAddress, String startPOI, String endPOI, Integer startMileage, Integer endMileage, Double usedkWh) {
+        this.user = user;
+        this.car = car;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.startCoord = startCoord;
+        this.endCoord = endCoord;
+        this.startAddress = startAddress;
+        this.endAddress = endAddress;
+        this.startPOI = startPOI;
+        this.endPOI = endPOI;
+        this.startMileage = startMileage;
+        this.endMileage = endMileage;
+        this.usedkWh = usedkWh;
+    }
 
     public String getUser() {
         return user;
@@ -42,19 +73,19 @@ public class Drive extends RealmObject{
         this.car = carId;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 

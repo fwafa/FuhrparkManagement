@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -81,8 +82,8 @@ public class ShowAllCarsActivity extends AppCompatActivity {
             public ViewHolder(LinearLayout container) {
                 super(container);
 
-                this.tvVendor = (TextView) container.findViewById(R.id.tvVendor);
-                this.tvModel = (TextView) container.findViewById(R.id.tvModel);
+                this.tvVendor    = (TextView) container.findViewById(R.id.tvVendor);
+                this.tvModel     = (TextView) container.findViewById(R.id.tvModel);
                 this.imageButton = (ImageButton) container.findViewById(R.id.imageViewCar);
             }
         }

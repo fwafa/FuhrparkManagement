@@ -5,4 +5,8 @@
         android:title="Update"
         android:id="@+id/refresh" />
 
+    <item
+        android:title="Delete Drive"
+        android:id="@+id/delete"/>
+
 </menu>
