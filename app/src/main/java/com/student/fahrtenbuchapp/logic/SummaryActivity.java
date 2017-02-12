@@ -49,7 +49,7 @@ public class SummaryActivity extends AppCompatActivity implements View.OnClickLi
     private String streetTo, zipTo, cityTo;
     private String startDate, stopDate;
     private String kmStart, kmStop;
-    private String kWh;
+    private String kWhUsed;
     private String notes;
 
     private long date = System.currentTimeMillis();
@@ -113,7 +113,7 @@ public class SummaryActivity extends AppCompatActivity implements View.OnClickLi
         stopDate    = intent.getStringExtra("stopDate");
         kmStart     = intent.getStringExtra("kmStart");
         kmStop      = intent.getStringExtra("kmStop");
-        kWh         = intent.getStringExtra("kwh");
+        kWhUsed     = intent.getStringExtra("kwhUsed");
         notes       = intent.getStringExtra("notes");
 
         tvName.setText(surname + " " + name);
@@ -121,7 +121,7 @@ public class SummaryActivity extends AppCompatActivity implements View.OnClickLi
         tvFrom.setText(streetFrom + "\n" + zipFrom + "\n" + cityFrom);
         tvTo.setText(streetTo + "\n" + zipTo + "\n" + cityTo);
         tvDate.setText(startDate + " - " + stopDate);
-        tvKwh.setText(kWh);
+        tvKwh.setText(kWhUsed);
         tvKm.setText(kmStop);
 
         if(notes != null) {

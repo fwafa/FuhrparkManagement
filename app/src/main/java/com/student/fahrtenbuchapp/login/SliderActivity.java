@@ -35,15 +35,28 @@ import android.widget.Toast;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import com.google.gson.reflect.TypeToken;
 import com.student.fahrtenbuchapp.R;
-import com.student.fahrtenbuchapp.dataSync.DriveToJSONConverter;
 import com.student.fahrtenbuchapp.dataSync.RestClient;
 import com.student.fahrtenbuchapp.logic.ShowAllCarsActivity;
+import com.student.fahrtenbuchapp.models.AddressStart;
+import com.student.fahrtenbuchapp.models.AddressStop;
 import com.student.fahrtenbuchapp.models.Credentials;
 import com.student.fahrtenbuchapp.models.Drive;
+import com.student.fahrtenbuchapp.models.LocationStart;
+import com.student.fahrtenbuchapp.models.LocationStop;
 import com.student.fahrtenbuchapp.models.Token;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -62,7 +75,6 @@ public class SliderActivity extends AppCompatActivity {
 
     private Realm realm;
     private RestClient restClient = new RestClient();
-    private DriveToJSONConverter driveToJSONConverter;
 
     ProgressDialog progressDialog;
 
@@ -326,59 +338,23 @@ public class SliderActivity extends AppCompatActivity {
                     }
 
                     realm = Realm.getDefaultInstance();
-                    RealmResults<Token> myTokens = realm.where(Token.class).findAll();
+                    RealmResults<Token> myToken = realm.where(Token.class).findAll();
 
                     RealmChangeListener realmChangeListener = new RealmChangeListener<RealmResults<Token>>() {
                         @Override
                         public void onChange(RealmResults<Token> element) {
 
-                            for (int i = 0; i < element.size(); i++) {
-                                restClient.getAllUser(SliderActivity.this, progressDialog, element.get(0));
-                            }
+                            restClient.getAllUser(SliderActivity.this, progressDialog, element.get(0));
                         }
                     };
 
-                    myTokens.addChangeListener(realmChangeListener);
+                    myToken.addChangeListener(realmChangeListener);
 
 
                     final RealmResults<Drive> drives = realm.where(Drive.class).findAll();
                     if(!drives.isEmpty()) {
 
-                        driveToJSONConverter = new DriveToJSONConverter();
-                        JSONObject driveToJson = driveToJSONConverter.DriveToJson(drives.get(0));
-                        System.out.println("JSON Object: " + driveToJson.toString());
-
-                        restClient.postJsonDrive(getApplicationContext(), driveToJson, myTokens.get(0));
-
-                        /*driveToJSONConverter = new DriveToJSONConverter();
-                        JSONObject driveToJson = driveToJSONConverter.DriveToJson(drives.get(0));
-
-                        System.out.println("JSON Object: " + driveToJson.toString());
-
-                        Drive drive = new Drive();
-                        drive.setUser("Farhad");
-                        drive.setCar("Volvo");
-                        drive.setStartDate("1.1.2017");
-                        drive.setEndDate("2.2.2017");
-                        drive.setStartAddress(null);
-                        drive.setEndAddress(null);
-                        drive.setStartCoord(null);
-                        drive.setEndCoord(null);
-                        drive.setStartPOI("München");
-                        drive.setEndPOI("Berlin");
-                        drive.setStartMileage(23000);
-                        drive.setEndMileage(23800);
-                        drive.setUsedkWh(2500.0);
-
-                        Gson gson = new Gson();
-                        //String gsonString = gson.toJson(driveToJson);
-                        System.out.println(gson.toJson(drives.get(0)));
-
-                        restClient.postJsonDrive(getApplicationContext(), driveToJson, myTokens.get(0));*/
-
-                        //restClient.postDrive(getApplicationContext(), drives.get(0), myTokens.get(0));
-
-                        /*for(int i=0; i<drives.size(); i++)
+                        for(int i=0; i<drives.size(); i++)
                         {
                             if(        drives.get(i).getUser() != null
                                     && drives.get(i).getCar() != null
@@ -392,9 +368,52 @@ public class SliderActivity extends AppCompatActivity {
                                     && drives.get(i).getEndMileage() != null
                                     && drives.get(i).getUsedkWh() != null)
                             {
-                                restClient.postDrive(getApplicationContext(), drives.get(i), myTokens.get(0));
+                                String userID = drives.get(i).getUser();
+                                String carId = drives.get(i).getCar();
+                                String startDate = drives.get(i).getStartDate();
+                                String endDate = drives.get(i).getEndDate();
+                                String startPOI = drives.get(i).getStartPOI();
+                                String endPOI = drives.get(i).getEndPOI();
+                                int startMileage = drives.get(i).getStartMileage();
+                                int endMileage = drives.get(i).getEndMileage();
+                                double usedkWh = drives.get(i).getUsedkWh();
+
+                                String startCoordLatitude = drives.get(i).getStartCoord().getLatitude();
+                                String startCoordLongitude = drives.get(i).getStartCoord().getLongitude();
+
+                                String endCoordLatitude = drives.get(i).getEndCoord().getLatitude();
+                                String endCoordLongitude = drives.get(i).getEndCoord().getLongitude();
+
+                                String startAddressCountry = drives.get(i).getStartAddress().getCountry();
+                                String startAddressCity = drives.get(i).getStartAddress().getCity();
+                                String startAddressZip = drives.get(i).getStartAddress().getZip();
+                                String startAddressStreet = drives.get(i).getStartAddress().getStreet();
+
+                                String endAddressCountry = drives.get(i).getEndAddress().getCountry();
+                                String endAddressCity = drives.get(i).getEndAddress().getCity();
+                                String endAddressZip = drives.get(i).getEndAddress().getZip();
+                                String endAddressStreet = drives.get(i).getEndAddress().getStreet();
+
+                                AddressStart addressStart   = new AddressStart(startAddressCountry, startAddressCity, startAddressZip, startAddressStreet);
+                                AddressStop addressStop     = new AddressStop(endAddressCountry, endAddressCity, endAddressZip, endAddressStreet);
+                                LocationStart locationStart = new LocationStart(startCoordLatitude, startCoordLongitude);
+                                LocationStop locationStop   = new LocationStop(endCoordLatitude, endCoordLongitude);
+
+                                final Drive drive = new Drive(userID, carId, startDate, endDate, locationStart, locationStop,
+                                        addressStart, addressStop, startPOI, endPOI, startMileage, endMileage, usedkWh);
+
+                                RealmChangeListener tokenChangeListener = new RealmChangeListener<RealmResults<Token>>() {
+                                    @Override
+                                    public void onChange(RealmResults<Token> element) {
+
+                                        System.out.println("Token element: " + element.get(0));
+                                        restClient.postNewDrives(getApplicationContext(), element.get(0), drive);
+                                    }
+                                };
+
+                                myToken.addChangeListener(tokenChangeListener);
                             }
-                        }*/
+                        }
                     }
                     else
                     {

@@ -14,6 +14,13 @@ public class LocationStart extends RealmObject{
     @SerializedName("longitude")
     private String longitude;
 
+    public LocationStart(){}
+
+    public LocationStart(String latitude, String longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public String getLatitude() {
         return latitude;
     }

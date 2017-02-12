@@ -10,6 +10,7 @@ public class Token extends RealmObject{
     @SerializedName("token")
     private String token;
 
+
     public String getToken() {
         return token;
     }

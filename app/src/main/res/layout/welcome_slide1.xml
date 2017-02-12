@@ -15,7 +15,8 @@
         <ImageView
             android:layout_width="200dp"
             android:layout_height="200dp"
-            app:srcCompat="@drawable/fmlogo_xxxhdpi" />
+            app:srcCompat="@drawable/fmlogo_xxxhdpi"
+            android:scaleType="centerCrop" />
 
         <TextView
             android:layout_width="wrap_content"

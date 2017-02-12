@@ -1,8 +1,13 @@
 package com.student.fahrtenbuchapp.dataSync;
 
+import com.google.gson.JsonObject;
+import com.student.fahrtenbuchapp.models.AddressStart;
+import com.student.fahrtenbuchapp.models.AddressStop;
 import com.student.fahrtenbuchapp.models.Car;
 import com.student.fahrtenbuchapp.models.Credentials;
 import com.student.fahrtenbuchapp.models.Drive;
+import com.student.fahrtenbuchapp.models.LocationStart;
+import com.student.fahrtenbuchapp.models.LocationStop;
 import com.student.fahrtenbuchapp.models.Token;
 import com.student.fahrtenbuchapp.models.User;
 
@@ -11,6 +16,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -24,6 +30,7 @@ import retrofit2.http.Path;
 
 
 public interface BackEndService {
+
     @POST("login")
     Call<Token> getToken(@Body Credentials credentials);
 
@@ -33,11 +40,7 @@ public interface BackEndService {
     @GET("cars/{car}")
     Call<ArrayList<Car>> listCars(@Path("car") String car);
 
-    @Headers("Content-Type: application/json")
+    @Headers({"Content-Type: application/json"})
     @POST("drives")
-    Call<Drive> postDrive(@Header("Authorization") String token, @Body Drive drive);
-
-    @Headers("Content-Type: application/json")
-    @POST("drives")
-    Call<Drive> postJsonDrive(@Header("Authorization") String token, @Body JSONObject body);
+    Call<ArrayList<Drive>> postDrives(@Header("Authorization") String token, @Body Drive drive);
 }

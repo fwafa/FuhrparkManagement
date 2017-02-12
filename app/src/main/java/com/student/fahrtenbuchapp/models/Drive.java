@@ -35,7 +35,7 @@ public class Drive extends RealmObject{
     private Integer startMileage;
     @SerializedName("endMileage")
     private Integer endMileage;
-    @SerializedName("usedkwh")
+    @SerializedName("usedkWh")
     private Double usedkWh;
 
 

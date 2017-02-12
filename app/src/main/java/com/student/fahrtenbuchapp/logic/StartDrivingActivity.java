@@ -119,7 +119,6 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
             logout();
         }*/
 
-        DigitalClock digital = (DigitalClock) findViewById(R.id.digital_clock);
 
         tvDriverName = (TextView) findViewById(R.id.nameTextView);
 
@@ -256,18 +255,21 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    if(tvStartPosition.getText() == null)
+                    if(tvStartPosition.getText().toString().trim().length() == 0)
                     {
                         switchStart.setChecked(false);
 
-                        LayoutInflater inflater = getLayoutInflater();
-                        View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) findViewById(R.id.toastRelativeLayout));
+                        Toast toast = Toast.makeText(StartDrivingActivity.this, "Leeres Eingabefeld!", Toast.LENGTH_SHORT);
+                        View toastView = toast.getView(); //This'll return the default View of the Toast.
 
-                        Toast toast = new Toast(getApplicationContext());
-                        toast.setDuration(Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                        toast.setView(layout);
-                        toast.setText("Leeres Eingabfeld!");
+                                    /* And now you can get the TextView of the default View of the Toast. */
+                        TextView toastMessage = (TextView) toastView.findViewById(android.R.id.message);
+                        toastMessage.setTextSize(25);
+                        toastMessage.setTextColor(Color.WHITE);
+                        toastMessage.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                        toastMessage.setGravity(Gravity.CENTER);
+                        toastMessage.setCompoundDrawablePadding(16);
+                        toastView.setBackgroundColor(getResources().getColor(R.color.toast_color));
                         toast.show();
                     }
                 }
@@ -336,18 +338,21 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
                         }
                     }
 
-                    if(tvDestinationPosition.getText() == null)
+                    if(tvDestinationPosition.getText().toString().trim().length() == 0)
                     {
                         switchDestination.setChecked(false);
 
-                        LayoutInflater inflater = getLayoutInflater();
-                        View layout = inflater.inflate(R.layout.toast_layout, (ViewGroup) findViewById(R.id.toastRelativeLayout));
+                        Toast toast = Toast.makeText(StartDrivingActivity.this, "Daten erfolgreich gespeichert!", Toast.LENGTH_SHORT);
+                        View toastView = toast.getView(); //This'll return the default View of the Toast.
 
-                        Toast toast = new Toast(getApplicationContext());
-                        toast.setDuration(Toast.LENGTH_SHORT);
-                        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                        toast.setView(layout);
-                        toast.setText("Leeres Eingabfeld!");
+                                    /* And now you can get the TextView of the default View of the Toast. */
+                        TextView toastMessage = (TextView) toastView.findViewById(android.R.id.message);
+                        toastMessage.setTextSize(25);
+                        toastMessage.setTextColor(Color.WHITE);
+                        toastMessage.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                        toastMessage.setGravity(Gravity.CENTER);
+                        toastMessage.setCompoundDrawablePadding(16);
+                        toastView.setBackgroundColor(getResources().getColor(R.color.toast_color));
                         toast.show();
                     }
                 }
@@ -549,7 +554,6 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
 
                 String stringKiloEnd = etKiloEnd.getText().toString();
                 String stopAddress = tvDestinationPosition.getText().toString();
-
                 kwhStop = etSetKwhStop.getText().toString();
 
                 if(stringKiloEnd.trim().length() == 0)
@@ -766,7 +770,8 @@ public class StartDrivingActivity extends AppCompatActivity implements View.OnCl
                                         intent.putExtra("stopDate", finalStopingTime.format(stopDate));
                                         intent.putExtra("kmStart", etKiloStart.getText().toString());
                                         intent.putExtra("kmStop", etKiloEnd.getText().toString());
-                                        intent.putExtra("kwh", String.valueOf(kwhFinal));
+                                        intent.putExtra("kwhUsed", String.valueOf(kwhFinal));
+                                        intent.putExtra("kwhEnd", String.valueOf(kwhFinal));
                                         intent.putExtra("notes", etNotes.getText().toString());
 
 

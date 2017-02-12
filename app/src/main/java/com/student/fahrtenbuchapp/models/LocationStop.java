@@ -15,6 +15,13 @@ public class LocationStop extends RealmObject{
     @SerializedName("longitude")
     private String longitude;
 
+    public LocationStop(){}
+
+    public LocationStop(String latitude, String longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public String getLatitude() {
         return latitude;
     }
