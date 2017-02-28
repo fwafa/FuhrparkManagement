@@ -1,47 +1,45 @@
 package com.student.fahrtenbuchapp.logic;
 
-import android.app.ProgressDialog;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
 import com.student.fahrtenbuchapp.R;
+import com.student.fahrtenbuchapp.dataSync.RestClient;
+import com.student.fahrtenbuchapp.models.AddressStart;
+import com.student.fahrtenbuchapp.models.AddressStop;
 import com.student.fahrtenbuchapp.models.Drive;
+import com.student.fahrtenbuchapp.models.LocationStart;
+import com.student.fahrtenbuchapp.models.LocationStop;
+import com.student.fahrtenbuchapp.models.Token;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
+
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 
 public class SummaryActivity extends AppCompatActivity implements View.OnClickListener{
 
     private TextView tvName, tvCar, tvFrom, tvTo, tvDate, tvKm, tvCurrentDate, tvKwh, tvNotes;
     private Button buttonNewDrive, buttonExit;
-    private ProgressDialog progressDialog;
+
     private Realm realm;
+    private RestClient restClient = new RestClient();
 
     private String name, surname;
     private String carVendor, carModel;
@@ -52,8 +50,9 @@ public class SummaryActivity extends AppCompatActivity implements View.OnClickLi
     private String kWhUsed;
     private String notes;
 
+    private boolean readyToExit;
+
     private long date = System.currentTimeMillis();
-    final static String ISO8601DATEFORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSZ";
 
 
     @Override
@@ -91,6 +90,17 @@ public class SummaryActivity extends AppCompatActivity implements View.OnClickLi
                 });
 
         AlertDialog dialog = builder.create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                Button positiveButton = ((android.app.AlertDialog) dialog)
+                        .getButton(android.app.AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setTextSize(25);
+            }
+        });
+
         dialog.show();
 
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy");
@@ -163,21 +173,124 @@ public class SummaryActivity extends AppCompatActivity implements View.OnClickLi
 
             case R.id.buttonExit:
 
+                realm = Realm.getDefaultInstance();
+
+                final Token myToken = realm.where(Token.class).findFirst();
+                final RealmResults<Drive> drives = realm.where(Drive.class).findAll();
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 LayoutInflater inflater = this.getLayoutInflater();
-
                 builder.setView(inflater.inflate(R.layout.dialog_layout_exit, null))
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                finishAffinity();
-                                overridePendingTransition(R.anim.zoom_out, 0);
-                                System.exit(0);
+                                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                                NetworkInfo wifi = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+                                if (wifi.isConnected()) {
+
+                                    if (!drives.isEmpty()) {
+
+                                        for (int i = 0; i < drives.size(); i++) {
+                                            if (drives.get(i).getUser() != null
+                                                    && drives.get(i).getCar() != null
+                                                    && drives.get(i).getStartDate() != null
+                                                    && drives.get(i).getEndDate() != null
+                                                    && drives.get(i).getStartCoord() != null
+                                                    && drives.get(i).getEndCoord() != null
+                                                    && drives.get(i).getStartAddress() != null
+                                                    && drives.get(i).getEndAddress() != null
+                                                    && drives.get(i).getStartMileage() != null
+                                                    && drives.get(i).getEndMileage() != null
+                                                    && drives.get(i).getUsedkWh() != null) {
+                                                String userID = drives.get(i).getUser();
+                                                String carId = drives.get(i).getCar();
+                                                String startDate = drives.get(i).getStartDate();
+                                                String endDate = drives.get(i).getEndDate();
+                                                String startPOI = drives.get(i).getStartPOI();
+                                                String endPOI = drives.get(i).getEndPOI();
+                                                int startMileage = drives.get(i).getStartMileage();
+                                                int endMileage = drives.get(i).getEndMileage();
+                                                double usedkWh = drives.get(i).getUsedkWh();
+
+                                                String startCoordLatitude = drives.get(i).getStartCoord().getLatitude();
+                                                String startCoordLongitude = drives.get(i).getStartCoord().getLongitude();
+
+                                                String endCoordLatitude = drives.get(i).getEndCoord().getLatitude();
+                                                String endCoordLongitude = drives.get(i).getEndCoord().getLongitude();
+
+                                                String startAddressCountry = drives.get(i).getStartAddress().getCountry();
+                                                String startAddressCity = drives.get(i).getStartAddress().getCity();
+                                                String startAddressZip = drives.get(i).getStartAddress().getZip();
+                                                String startAddressStreet = drives.get(i).getStartAddress().getStreet();
+
+                                                String endAddressCountry = drives.get(i).getEndAddress().getCountry();
+                                                String endAddressCity = drives.get(i).getEndAddress().getCity();
+                                                String endAddressZip = drives.get(i).getEndAddress().getZip();
+                                                String endAddressStreet = drives.get(i).getEndAddress().getStreet();
+
+                                                AddressStart addressStart = new AddressStart(startAddressCountry, startAddressCity, startAddressZip, startAddressStreet);
+                                                AddressStop addressStop = new AddressStop(endAddressCountry, endAddressCity, endAddressZip, endAddressStreet);
+                                                LocationStart locationStart = new LocationStart(startCoordLatitude, startCoordLongitude);
+                                                LocationStop locationStop = new LocationStop(endCoordLatitude, endCoordLongitude);
+
+                                                final Drive drive = new Drive(userID, carId, startDate, endDate, locationStart, locationStop,
+                                                        addressStart, addressStop, startPOI, endPOI, startMileage, endMileage, usedkWh);
+
+
+                                                restClient.postNewDrives(getApplicationContext(), myToken, drive);
+
+                                                readyToExit = true;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        finishAffinity();
+                                        overridePendingTransition(R.anim.zoom_out, 0);
+                                        System.exit(0);
+                                    }
+                                }
+                                else
+                                {
+                                    finishAffinity();
+                                    overridePendingTransition(R.anim.zoom_out, 0);
+                                    System.exit(0);
+                                }
+
+                                if(readyToExit)
+                                {
+                                    Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+
+                                            finishAffinity();
+                                            overridePendingTransition(R.anim.zoom_out, 0);
+                                            System.exit(0);
+                                        }
+                                    }, 2000);
+                                }
                             }
                         });
 
                 AlertDialog dialog = builder.create();
+
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+
+                        Button positiveButton = ((android.app.AlertDialog) dialog)
+                                .getButton(android.app.AlertDialog.BUTTON_POSITIVE);
+                        positiveButton.setTextSize(25);
+
+                        Button negativeButton = ((android.app.AlertDialog) dialog)
+                                .getButton(android.app.AlertDialog.BUTTON_NEGATIVE);
+                        negativeButton.setTextSize(25);
+                    }
+                });
+
                 dialog.show();
                 break;
         }

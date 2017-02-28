@@ -14,6 +14,11 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+
+import com.student.fahrtenbuchapp.R;
 
 public class GPSTracker extends Service implements LocationListener {
 
@@ -104,13 +109,6 @@ public class GPSTracker extends Service implements LocationListener {
 	public void stopUsingGPS() {
 		if (locationManager != null) {
 			if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-				// TODO: Consider calling
-				//    ActivityCompat#requestPermissions
-				// here to request the missing permissions, and then overriding
-				//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-				//                                          int[] grantResults)
-				// to handle the case where the user grants the permission. See the documentation
-				// for ActivityCompat#requestPermissions for more details.
 				return;
 			}
 			locationManager.removeUpdates(GPSTracker.this);
@@ -137,13 +135,53 @@ public class GPSTracker extends Service implements LocationListener {
 	}
 	
 	public void showSettingsAlert() {
-		AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+		builder.setView(inflater.inflate(R.layout.dialog_layout_gps, null))
+				.setPositiveButton("Einstellungen", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+						context.startActivity(intent);
+					}
+				})
+				.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				});
+
+		AlertDialog dialog = builder.create();
+
+		dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+			@Override
+			public void onShow(DialogInterface dialog) {
+
+				Button positiveButton = ((AlertDialog) dialog)
+						.getButton(AlertDialog.BUTTON_POSITIVE);
+				positiveButton.setTextSize(25);
+
+				Button negativeButton = ((AlertDialog) dialog)
+						.getButton(AlertDialog.BUTTON_NEGATIVE);
+				negativeButton.setTextSize(25);
+			}
+		});
+
+		dialog.show();
+
+
+
+		/*AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
 		
-		alertDialog.setTitle("GPS is settings");
+		alertDialog.setTitle("GPS Signal");
+		alertDialog.setMessage("GPS ist nicht eingeschaltet.\nBitte zuerst aktivieren!");
 		
-		alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
-		
-		alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+		alertDialog.setPositiveButton("Einstellungen", new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -152,7 +190,7 @@ public class GPSTracker extends Service implements LocationListener {
 			}
 		});
 		
-		alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		alertDialog.setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -160,7 +198,7 @@ public class GPSTracker extends Service implements LocationListener {
 			}
 		});
 		
-		alertDialog.show();
+		alertDialog.show();*/
 	}
 	
 	@Override

@@ -32,15 +32,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-import com.google.gson.reflect.TypeToken;
 import com.student.fahrtenbuchapp.R;
 import com.student.fahrtenbuchapp.dataSync.RestClient;
 import com.student.fahrtenbuchapp.logic.ShowAllCarsActivity;
@@ -51,12 +42,6 @@ import com.student.fahrtenbuchapp.models.Drive;
 import com.student.fahrtenbuchapp.models.LocationStart;
 import com.student.fahrtenbuchapp.models.LocationStop;
 import com.student.fahrtenbuchapp.models.Token;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -91,7 +76,9 @@ public class SliderActivity extends AppCompatActivity {
             finish();
         }*/
 
+
         prefManager = new PrefManager(this);
+
 
         // Making notification bar transparent
         if (Build.VERSION.SDK_INT >= 21) {
@@ -180,7 +167,7 @@ public class SliderActivity extends AppCompatActivity {
             RealmResults<Token> tokenRealmResults = realm.where(Token.class).findAll();
             if(tokenRealmResults.isEmpty())
             {
-                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 LayoutInflater inflater = this.getLayoutInflater();
 
                 builder.setView(inflater.inflate(R.layout.dialog_layout_synchronize, null))
@@ -191,7 +178,20 @@ public class SliderActivity extends AppCompatActivity {
                             }
                         });
 
-                android.support.v7.app.AlertDialog dialog = builder.create();
+                AlertDialog dialog = builder.create();
+                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+
+                        Button positiveButton = ((AlertDialog) dialog)
+                                .getButton(AlertDialog.BUTTON_POSITIVE);
+                        positiveButton.setTextSize(25);
+
+                        Button negativeButton = ((AlertDialog) dialog)
+                                .getButton(AlertDialog.BUTTON_NEGATIVE);
+                        negativeButton.setTextSize(25);
+                    }
+                });
                 dialog.show();
             }
             else
@@ -302,22 +302,6 @@ public class SliderActivity extends AppCompatActivity {
 
         switch (item.getItemId())
         {
-            case R.id.delete:
-                realm = Realm.getDefaultInstance();
-                final RealmResults<Drive> myDrives = realm.where(Drive.class).findAll();
-
-                if(!myDrives.isEmpty())
-                {
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-
-                            myDrives.deleteAllFromRealm();
-                        }
-                    });
-                }
-                break;
-
             case R.id.refresh:
 
                 ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -417,7 +401,7 @@ public class SliderActivity extends AppCompatActivity {
                     }
                     else
                     {
-                        Toast toast = Toast.makeText(SliderActivity.this, "Daten konnten nicht übermittelt werden\nDaten unvollständig!", Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(SliderActivity.this, "Es sind noch keine Farhten vorhanden!", Toast.LENGTH_SHORT);
                         View toastView = toast.getView(); //This'll return the default View of the Toast.
 
                         /* And now you can get the TextView of the default View of the Toast. */
@@ -434,30 +418,44 @@ public class SliderActivity extends AppCompatActivity {
 
                 else
                 {
-                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    LayoutInflater inflater = this.getLayoutInflater();
 
-                    alertDialog.setTitle("WiFi setting");
+                    builder.setView(inflater.inflate(R.layout.dialog_layout_wifi, null))
+                            .setPositiveButton("Einstellungen", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 
-                    alertDialog.setMessage("WiFi is not enabled. Do you want to go to settings menu?");
+                                    Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                                    startActivity(intent);
+                                }
+                            })
 
-                    alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+                            .setNegativeButton("Abbrechen", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 
+                                    dialog.cancel();
+                                }
+                            });
+
+                    AlertDialog dialog = builder.create();
+
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                         @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-                            startActivity(intent);
+                        public void onShow(DialogInterface dialog) {
+
+                            Button positiveButton = ((AlertDialog) dialog)
+                                    .getButton(AlertDialog.BUTTON_POSITIVE);
+                            positiveButton.setTextSize(25);
+
+                            Button negativeButton = ((AlertDialog) dialog)
+                                    .getButton(AlertDialog.BUTTON_NEGATIVE);
+                            negativeButton.setTextSize(25);
                         }
                     });
 
-                    alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    });
-
-                    alertDialog.show();
+                    dialog.show();
                 }
 
                 break;

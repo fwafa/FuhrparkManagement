@@ -5,14 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,6 +40,7 @@ public class ShowAllCarsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_all_cars);
 
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
 
@@ -52,7 +53,23 @@ public class ShowAllCarsActivity extends AppCompatActivity {
             });
 
         AlertDialog dialog = builder.create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                Button positiveButton = ((AlertDialog) dialog)
+                        .getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setTextSize(25);
+
+                Button negativeButton = ((AlertDialog) dialog)
+                        .getButton(AlertDialog.BUTTON_NEGATIVE);
+                negativeButton.setTextSize(25);
+            }
+        });
+
         dialog.show();
+
 
         allCarsTextViewTitle = (TextView) findViewById(R.id.allCarsTextViewTitle);
         Typeface typeface = Typeface.createFromAsset(getAssets(), "fonts/SNAP.TTF");

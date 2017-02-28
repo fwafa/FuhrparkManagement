@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="400dp"
-    android:layout_height="200dp"
+    android:layout_height="250dp"
     android:orientation="vertical"
     android:background="#8cffffff">
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="30dp"
         android:background="#8cffffff"/>
 
 
@@ -17,7 +17,7 @@
         android:textColor="#c20a01"
         android:textSize="30sp"
         android:text="Auf Wiedersehen"
-        android:layout_gravity="center"
+        android:layout_gravity="center_horizontal"
         android:id="@+id/textView2" />
 
 

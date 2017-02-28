@@ -50,8 +50,9 @@ public class LoginActivity extends AppCompatActivity {
     private String password, username;
     private EditText etUser, etPass;
 
-    private Realm realm;
+    private boolean userAndPasswordAreTrue;
 
+    private Realm realm;
     private TokenData tokenData = new TokenData();
 
 
@@ -142,41 +143,53 @@ public class LoginActivity extends AppCompatActivity {
                     editor.putString(Name, username);
                     editor.apply();
 
-                    for(int i=0; i<userRealmResults.size(); i++)
-                    {
-                        String securedPasswordHash = null;
 
-                        if (username.trim().length() == 0) {
-                            etUser.setError("Enter Username");
-                        }
+                    String securedPasswordHash = null;
 
-                        if (password.trim().length() == 0) {
-                            etPass.setError("Enter Password");
-                        }
-                        else {
-                            try {
+                    if (username.trim().length() == 0) {
+                        etUser.setError("Enter Username");
+                    }
+
+                    else if (password.trim().length() == 0) {
+                        etPass.setError("Enter Password");
+                    }
+                    else {
+                        try {
+                            for(int i=0; i<userRealmResults.size(); i++) {
+
                                 securedPasswordHash = generatePasswordHash(password, userRealmResults.get(i).getSalt());
-                            } catch (NoSuchAlgorithmException e) {
-                                e.printStackTrace();
-                            } catch (InvalidKeySpecException e) {
-                                e.printStackTrace();
+
+                                if (userRealmResults.get(i).getUsername().equals(username) &&
+                                        userRealmResults.get(i).getHash().equals(securedPasswordHash))
+                                {
+                                    userAndPasswordAreTrue = true;
+                                }
+
+                                else
+                                {
+                                    userAndPasswordAreTrue = false;
+                                }
                             }
-                            System.out.println(securedPasswordHash);
+
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                        } catch (InvalidKeySpecException e) {
+                            e.printStackTrace();
                         }
 
-                        if (username.equals(userRealmResults.get(i).getUsername()) &&
-                                securedPasswordHash.equals(userRealmResults.get(i).getHash())) {
 
+                        if(userAndPasswordAreTrue)
+                        {
                             Intent intent = new Intent(LoginActivity.this, WaitForLoginActivity.class);
                             startActivity(intent);
                             finish();
                         }
-                        else if(!username.equals(userRealmResults.get(i).getUsername()) &&
-                                !securedPasswordHash.equals(userRealmResults.get(i).getHash()))
+                        else
                         {
-                            //Toast.makeText(LoginActivity.this, "Wrong username/password", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Wrong username/password", Toast.LENGTH_SHORT).show();
                         }
 
+                        System.out.println(securedPasswordHash);
                     }
                 }
             });
